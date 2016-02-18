@@ -92,6 +92,16 @@
 
 
 
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?009bb473fb966b665a58eec49a7a6dfc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
 
 
 
@@ -273,6 +283,13 @@
 
           
             
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/02/19/2015-2016年总结和新年鸡血/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/19/2015-2016年总结和新年鸡血/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -293,6 +310,157 @@
         
           
             <p>待更新……</p>
+
+          
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/02/19/使用hexo在GitHub搭建个人博客/" itemprop="url">
+                  使用hexo在GitHub搭建个人博客
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-02-18T17:36:43+00:00" content="2016-02-18">
+              2016-02-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/其它/" itemprop="url" rel="index">
+                    <span itemprop="name">其它</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/02/19/使用hexo在GitHub搭建个人博客/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/19/使用hexo在GitHub搭建个人博客/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>hexo是一款快速、简洁、高效的博客框架，底层基于node.js，编写博客采用markdown语法。github pages免费提供静态网页托管的服务，容量为<br>300M，对于一个博客来说，容量已经足够了，但其中也存在一个问题，github毕竟是一个国外的网站，国内访问速度有限。<br>hexo在升级中很多地方发生了变动，网上教程很多都是针对老版本的，自己的安装部署的时候参照老教程踩了一些坑，因此将具体的步骤记录下来，以飨读者：</p>
+<p><strong>环境</strong>：</p>
+<ul>
+<li>Ubuntu 14.04LTS </li>
+<li>OS X EI Capitan</li>
+</ul>
+<h2 id="OS-X-EI-Capitan安装hexo方法"><a href="#OS-X-EI-Capitan安装hexo方法" class="headerlink" title="OS X EI Capitan安装hexo方法"></a>OS X EI Capitan安装hexo方法</h2><blockquote>
+<p>在mac下，可以使用包管理器brew，brew管理器安装方法<a href="http://brew.sh/index_zh-cn.html" target="_blank" rel="external">链接</a></p>
+</blockquote>
+<h3 id="1、安装node-js"><a href="#1、安装node-js" class="headerlink" title="1、安装node.js"></a>1、安装node.js</h3><p>终端中输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install nodejs</span><br></pre></td></tr></table></figure>
+<p>node.js也可以自己去官网下载，自行安装</p>
+<h3 id="2、安装git"><a href="#2、安装git" class="headerlink" title="2、安装git"></a>2、安装git</h3><p>安装git的目的是方便自己将博客同步到github、终端中输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install git</span><br></pre></td></tr></table></figure>
+<p>git也可以自己去官网下载，自行安装</p>
+<h3 id="3、安装hexo"><a href="#3、安装hexo" class="headerlink" title="3、安装hexo"></a>3、安装hexo</h3><p>node.js自带了npm，因此我们用npm来安装hexo，终端中输入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo    <span class="comment">#-g参数代表全局安装</span></span><br></pre></td></tr></table></figure>
+<p>在终端中输入nodejs version git varsion hexo version,如果正确显示版本号，则安装成功</p>
+<h3 id="4、本地测试博客"><a href="#4、本地测试博客" class="headerlink" title="4、本地测试博客"></a>4、本地测试博客</h3><p>在基本的环境安装好以后，打开终端，cd到自己测试的文件夹中，依次输入如下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo init &lt;floder&gt;   <span class="comment">#&lt;floder&gt;代表你要创建的博客文件夹</span></span><br><span class="line">npm install     <span class="comment">#安装必要的依赖库</span></span><br></pre></td></tr></table></figure>
+<p>安装成功后，可以看到自动生成的文件目录为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">node_modules</span><br><span class="line">scaffolds</span><br><span class="line"><span class="built_in">source</span></span><br><span class="line">   -posts</span><br><span class="line">themes</span><br><span class="line">  -landscape  <span class="comment">#默认主题</span></span><br><span class="line">_config.yml</span><br><span class="line">package.json</span><br></pre></td></tr></table></figure>
+<p>接着，在终端中运行博客程序：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server <span class="comment">#或者输入 hexo s</span></span><br></pre></td></tr></table></figure>
+<p>在终端中会显示：</p>
+<p>如果以上没有发生错误，在浏览器中打开localhost:4000可以看到生成的博客。<br>此处有一个大坑需要注意（特别对于不细心的同学）点击图片查看详情</p>
+<img src="/2016/02/19/使用hexo在GitHub搭建个人博客/localhost.jpg" alt="localhost.jpg" title="">
+<blockquote>
+<p>终端显示程序运行在0.0.0.0:4000,如果自己不小心就会打开用鼠标复制粘帖，或者右键直接打开url，但是此时在<br>浏览器却发现网页无显示！！！一开始我以为是环境没有配置好，少了一些依赖库，后来发现是localhost的原因，你本机上的localhost不一定是0.0.0.0,特别是你翻墙用了一些代理工具时<br>同时，我还遇到过在safai上能正确显示网页，chrome上却无显示的问题，这都是因为localhost。</p>
+</blockquote>
+<p>如果网页能正确的显示，就可以来创建博客的主题了，主题可以自己写（愿意折腾的话），也可以直接用一些开源的主题<br>github上有很多，比如这个博客，就是用的开源hexo主题nexT构建的。</p>
+<p><strong> 关于主题，因为每个人用的都不尽相同，这里就不做过多介绍，每个热门的主题都有相应的document，可以直接用<br>也可以自己diy</strong></p>
+<h2 id="Ubuntu-14-04LTS-安装hexo方法"><a href="#Ubuntu-14-04LTS-安装hexo方法" class="headerlink" title="Ubuntu 14.04LTS 安装hexo方法"></a>Ubuntu 14.04LTS 安装hexo方法</h2><p>ubuntu中可以在终端直接用apt-get来安装</p>
+<h3 id="1、安装git"><a href="#1、安装git" class="headerlink" title="1、安装git"></a>1、安装git</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install git</span><br></pre></td></tr></table></figure>
+<h3 id="2、安装node-js"><a href="#2、安装node-js" class="headerlink" title="2、安装node.js"></a>2、安装node.js</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install nodejs</span><br></pre></td></tr></table></figure>
+<p>此种方法安装的nodejs可能版本会较低，具体看自己系统配置的软件源<br>如果担心过低，可在安装之前输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:chris-lea/node.js </span><br><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
+<p>然后再安装</p>
+<h3 id="3、安装hexo-1"><a href="#3、安装hexo-1" class="headerlink" title="3、安装hexo"></a>3、安装hexo</h3><p>在终端中输入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install -g hexo</span><br></pre></td></tr></table></figure>
+<h3 id="4、本地测试博客-1"><a href="#4、本地测试博客-1" class="headerlink" title="4、本地测试博客"></a>4、本地测试博客</h3><p>先测试软件版本：如下<br><img src="/2016/02/19/使用hexo在GitHub搭建个人博客/version.jpg" alt="version.jpg" title=""><br><img src="/2016/02/19/使用hexo在GitHub搭建个人博客/hexoversion.jpg" alt="hexoversion.jpg" title=""><br>如果上述都安装好，就可以在本地测试建立博客了，方法和在OS X EI Capitan中一样，唯一需要注意的是<br>是否需要sudo权限的问题，方法见<strong>见上文</strong>。 </p>
+<p>未完待续……</p>
 
           
         
@@ -355,7 +523,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">2</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -523,9 +691,28 @@
 
   
 
+  
+    
+  
 
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ddragonever"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
 
   
+    
+  
+
+
 
 
 
