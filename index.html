@@ -209,15 +209,170 @@
 
     
     
+
+    
       
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/04/16/使用阿里云ECS踩坑总结/" itemprop="url">
+                  使用阿里云ECS踩坑总结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-15T20:14:30+00:00" content="2016-04-15">
+              2016-04-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/web/" itemprop="url" rel="index">
+                    <span itemprop="name">web</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/16/使用阿里云ECS踩坑总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/16/使用阿里云ECS踩坑总结/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
-        
-        
-        
       
 
       
-    
+        
+          
+            <p>ECS系统 ubuntu 14.04 LTS</p>
+<p>####1、flask部署环境相关问题<br>最近在学习flask，部署flask开发的网站，因此在ECS上配置flask web环境就是最重要的了。主要包含了python的一些包，mysql软件等等。下面总结了一些经验。</p>
+<p>#####安装mysql-server<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get <span class="operator"><span class="keyword">install</span> mysql-<span class="keyword">server</span></span></span><br></pre></td></tr></table></figure></p>
+<p>安装过程如果出现报错，比如某个url 404错误，可尝试更新系统或者更新软件源</p>
+<figure class="highlight q"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="built_in">get</span> <span class="keyword">update</span></span><br><span class="line">sudo aot-<span class="built_in">get</span> upgrade</span><br></pre></td></tr></table></figure>
+<p>更改软件源方法此处不赘述，阿里云官方文档有介绍。</p>
+<p>在mysql－server安装过程中，会提示用户输入root账户的密码，可按相关提示执行<br>然后，查看mysql服务的状态，终端下输入：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ps</span> -ef | <span class="keyword">grep</span> mysql</span><br></pre></td></tr></table></figure>
+<p>#####启动mysql－server<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysql <span class="literal">start</span></span><br></pre></td></tr></table></figure></p>
+<p>#####查看mysql数据表<br>进入mysql－server的安装目录，安装目录在安装的时候系统有提示。<br>终端下输入</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">mysql</span> -u用户名 -p密码</span><br></pre></td></tr></table></figure>
+<p>这样，就进入了mysql的命令行界面，在这里可以对相关数据库进行操作。<br>输入</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">show</span> <span class="keyword">databases</span>；</span></span><br></pre></td></tr></table></figure>
+<p>可以看见已经有的数据表</p>
+<p>#####设置数据库字符编码<br>要让数据库中显示保存中文不乱码，就要设置mysql的字符编码，打开编辑mysql配置文件my.cnf</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cd</span> /etc/mysql/my.<span class="keyword">cnf</span></span><br></pre></td></tr></table></figure>
+<p>#####设置远程连接数据库<br>在mysql命令行下执行下面的命令<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">use</span> mysql;</span></span><br><span class="line"><span class="operator"><span class="keyword">select</span> Host,<span class="keyword">User</span> <span class="keyword">from</span> <span class="keyword">user</span>;</span>	</span><br><span class="line"><span class="operator"><span class="keyword">update</span> <span class="keyword">user</span> <span class="keyword">set</span> Host=<span class="string">'%'</span> <span class="keyword">where</span> <span class="keyword">User</span>=<span class="string">'root'</span> <span class="keyword">limit</span> <span class="number">1</span>;</span></span><br><span class="line"><span class="operator"><span class="keyword">flush</span> <span class="keyword">privileges</span>;</span></span><br></pre></td></tr></table></figure></p>
+<p>测试是否能连接远程的mysql服务器<br>在本地电脑的终端中，先安装mysql-client客户端，然后对ecs的数据库发起连接请求，测试能否连接成功</p>
+<figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">mysql</span> -uroot -ppassword -h addr -<span class="type">P</span> <span class="foreign"><span class="keyword">port</span> -D database</span></span><br></pre></td></tr></table></figure>
+<p>成功的话自己电脑终端下就会显示mysql命令行界面</p>
+<p>#####查看mysql使用的端口号<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">show</span> variabels <span class="keyword">like</span> <span class="string">'port'</span></span></span><br></pre></td></tr></table></figure></p>
+<p>#####当忘记了mysql的密码时<br>在mysql配置文件my.cnf中添加这一行，就跳过密码验证（先关闭mysql服务，再设置）</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">skip-<span class="operator"><span class="keyword">grant</span>-<span class="keyword">tables</span></span></span><br></pre></td></tr></table></figure>
+<p>然后重新设置密码</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">update</span> mysql.<span class="keyword">user</span> <span class="keyword">set</span> <span class="keyword">password</span>=<span class="keyword">password</span>(<span class="string">'123'</span>) <span class="keyword">where</span> <span class="keyword">user</span>=<span class="string">'root'</span></span></span><br></pre></td></tr></table></figure>
+<p>#####部署flask生产环境<br>部署flask的生产环境建议使用virtualenv的虚拟环境，这样不会将各个项目不同的依赖包都导入，直接影响到全局的环境。</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="built_in">get</span> install <span class="keyword">python</span>-pip</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo pip <span class="keyword">install</span> virtualenv</span><br><span class="line">virtualenv venv</span><br></pre></td></tr></table></figure>
+<p>就创建了一个名为venv的虚拟环境，要激活虚拟环境，在venv同级目录下执行</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">source</span> venv<span class="regexp">/bin/</span>activate</span><br></pre></td></tr></table></figure>
+<p>如果要退出虚拟环境，执行</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deactivate</span><br></pre></td></tr></table></figure>
+<p>#####安装uwsgi<br>安装uwsgi的时候报错可能会报setuptools的错误，首先要安装编译uwsgi的依赖包<br>在终端中输入命令</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">   pip <span class="operator"><span class="keyword">install</span> python-dev</span><br><span class="line">sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> -U setuptools</span><br><span class="line">sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> <span class="keyword">update</span></span><br><span class="line">sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> uwsgi</span></span><br></pre></td></tr></table></figure>
+<p>#####解决外网无法访问mysql的问题<br>检查是否只监听本地的地址，<br>输入命令</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -nal <span class="string">|grep 3306</span></span><br></pre></td></tr></table></figure>
+<p>如果是，则需要修改mysql的配置文件，在mysqld下面添加监听0.0.0.0所有的端口</p>
+<p>也可能是被防火墙拦截了自己的连接服务，因此需要自己手动设置防火墙<br>输入命令</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ptables -A INPUT -<span class="tag">p</span> tcp --dport <span class="number">3306</span> -j ACCEPT</span><br></pre></td></tr></table></figure>
+<p>####2、php环境部署相关问题</p>
+<p>#####安装lamp<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo tasksel <span class="operator"><span class="keyword">install</span> lamp-<span class="keyword">server</span></span></span><br></pre></td></tr></table></figure></p>
+<p>   解决提示要安装语言环境依赖问题</p>
+   <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get <span class="operator"><span class="keyword">install</span> <span class="keyword">language</span>-pack-zh-hans</span><br><span class="line">sudo service apache2 restart</span></span><br></pre></td></tr></table></figure>
+<p>   安装phpmyaddmin发现远程连接不上,要先用命令建立关联：</p>
+   <figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ln -s <span class="regexp">/usr/</span>share<span class="regexp">/phpmyadmin /</span>var<span class="regexp">/www/</span>html<span class="regexp">/pma</span></span><br></pre></td></tr></table></figure>
+<p>   然后登陆ip/pma就可以了</p>
+<p>   修改phpmyadmin最大文件上传限制大小<br>   设置php.ini</p>
+<pre><code><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">     ```  &#10;   &#10;#####ssh&#22312;&#23433;&#35013;apache&#21518;&#31361;&#28982;&#36830;&#25509;&#19981;&#19978;</span><br></pre></td></tr></table></figure>
+</code></pre><p>sudo service ssh restart<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="preprocessor">#####ECS重做系统之后发现本地ssh连接不上服务器</span></span><br><span class="line">发现远程连接不上ssh，因为本地openssh保存公钥在known_hosts文件下  当系统变更后，造成密钥不匹配   解决方法  把该ip地址对应的密钥信息删除就可以了，命令</span><br></pre></td></tr></table></figure></p>
+<p>sudo nano /Users/a/.ssh/known_hosts<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">然后，找到该地址对应的信息，删除即可。</span><br><span class="line"></span><br><span class="line"><span class="comment">#####ubuntu中查找文件夹的名字</span></span><br><span class="line">``` </span><br><span class="line"> 	find / <span class="property">name</span> <span class="string">"fireName"</span></span><br></pre></td></tr></table></figure></p>
+<p>#####ubuntu中的发行版没有httpd.conf配置信息 而是用apache.conf替代了<br>此外  设置网站的发布目录夹在site-available中也要修改对应的目录</p>
+<p>#####解决部署网站网站提示缓存神马权限不够的问题</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod <span class="number">777</span>  /www   www目录替换为自己项目的目录</span><br></pre></td></tr></table></figure>
+<p>#####解决网站部署后无法访问phpmyaddmin<br>在apache2.conf中添加phpmyadmin的关联代码</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Include</span> <span class="regexp">/etc/</span>phpmyadmin<span class="regexp">/apache.conf</span></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -355,6 +510,350 @@
 
 
     
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/02/19/2015-2016年总结和新年鸡血/" itemprop="url">
+                  2015年总结和新年鸡血
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-02-18T21:39:45+00:00" content="2016-02-18">
+              2016-02-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/其它/" itemprop="url" rel="index">
+                    <span itemprop="name">其它</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/02/19/2015-2016年总结和新年鸡血/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/19/2015-2016年总结和新年鸡血/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>写这篇文章之前，我自己曾经犹豫过，到底还要不要写。一来16年已经快过去3个月了，二来不知道该写什么，该怎么总结，但是仔细想了想，还是写吧，趁自己对15年发生的事记忆犹新，趁现在还没开学，有时间~当然，博客的目的就是为了记录自己，而最重要的是想在新年给自己打打鸡血</p>
+<p>主要在生活，学习，专业上来回顾自己的这一年发生的事。15年对于我来说，充实而又有意义，很多以前没有做过的事情，在15年也尝试的做了，在这一年，学到了更多的知识，认识了更多有趣的人，去了更远的地方。</p>
+<h3 id="先来说说生活"><a href="#先来说说生活" class="headerlink" title="先来说说生活"></a>先来说说生活</h3><p>15年完成了大一下学期到大二上学期，学弟变成了学长的转变，总体而言，在对大学新鲜感神秘感退却以后，生活也慢慢的回归了平静，把更多的时间放在自己想做的事情上。因为课程的增加，自然没有大一上学期那般悠闲，自己自由的时间在变少，这一点在刚开学的时候就感受到了。虽然时间变少，可自己做的事情却比以前更多了。而且以前自己种的果也要自己吃，刚来大学的时候，自己怀着热情报名参加了很多社团，有一些要面试的社团也神奇的通过了。因此最后，我同时参加了三个社团，校青协、校职协还有计算机科学协会（acs）。对于前两个社团，自己一直都是酱油般的存在，很少参加活动，但是到了后来，自己仔细一想，发现良心上过不去。毕竟当时是自己报名参加的，既然参加了，就应该把该有的职责给承担起来，不能逃避。于是又主动的参加了一些活动，有些活动有意义，但更多的活动是没有意义的、比如让你写个无意义的策划，做个word。正因为社团无聊的活动太多，于是到了后来，大家对社团的热情都不高了，很多活动都没有人参加，这时候我们就被逼着参加，对于逼大家参加活动这种方式，我个人是非常反感的。不过这也让我更加相信了一句话</p>
+<blockquote>
+<p><strong>大学的很多社团都是松散的，无纪律的，虽然社团能成就一些人，可对于更多的人来说，参加社团活动就是浪费时间，完全学不到什么。</strong></p>
+</blockquote>
+<p>但是其中acs却让我感受到了不同，里面的学长学姐不会教你这个社会的”大道理”，而是真诚的对待你，会把生活学习中的曾经遇到过的些坑告诉你。正因为如此，我课余的时间都待在协会这边的工作室，在这里，大家因为志趣相投而聚在一起。也许是自己在这边做事比较认真，也许是其它原因，学长们慢慢地让我去组织一些大型活动。比如6月的校程序设计大赛，自己作为组织者之一，看着活动办好了，意义也很大，心里说不出的高兴。再后来，自己也成为了这个协会的管理者，责任越来越大。但自己管理半年之后，现在再看，凭心而论，自己确实没有把协会带好，这里面有很多的原因，更多的原因是自己，也在趁过年的时间好好反思。<br> 15年自己也去了一些地方，暑假参加学校的三下乡活动，跨院联合20多人到婺源太白镇教小孩子们学习一些知识，短暂的十几天，我们给小镇带去一些活力。活动还是很有意义的，每天去学校的时候，都可以看见小孩子们很开心，帮村民修电脑也是有意义的事情。三下乡活动结束后，自己回家安静了几天，就和朋友们一起去了广州，在那里度过了5天。前几天还在婺源农村，瞬间就到了发达的广州，由破败到金碧辉煌灯红酒绿，自己的心理有很大的落差，有的时候也会感叹为何社会发展差距如此之大（好像忧国忧民也没有用，还是好好学习吧～）。在玩的几天中，更加认识到，想要到大城市立足，自己需要付出很多的努力。就像老话说的那样，付出不一定有收获，但是不付出一定没有收获。<br> 社团生活说了很多，主要是它的确占了我生活很大一部分吧，那啥就不说了，感觉自己是注孤生的存在。。。</p>
+<h3 id="再来说说学习"><a href="#再来说说学习" class="headerlink" title="再来说说学习"></a>再来说说学习</h3><p>学习上，这一年自己没有认真去看书，上课也不知道自己干了什么，考试也是期末临时突击，这样没有挂科已是万幸。自己清楚以后读研的可能性不大，因此学习上没多花时间我倒也是心安理得。不过，谁能告诉我，课堂的时间我都干什么去了！！！是该好好想一下这个问题，好好的利用课堂时间做点什么，不要白白浪费了自己还不知道。同时，专业主干课该学的还是要认真学，比如计算机网络（虽然这门已经学完了）这些课的很多知识在自己编程开发过程中都会遇到，不能小看。专业学习因为自己刚来的时候嚷嚷着想学硬件，也学习一些知识，用树莓派做了一些东西。但技术含量不高，同时，因为学校缺少这方面的老师，自学资料少，感觉走下去难度太大。因此有意提高自己对Python的运用能力，因为Python能做好多事。经过几个学期的学习，意识到，cs本科的基础课程数据结构/算法对自己来说非常有用，自己也要尝试刷点题目，把基础学好，再针对某一个就业方面深入学习， 才是正道。</p>
+<h3 id="最后说说专业"><a href="#最后说说专业" class="headerlink" title="最后说说专业"></a>最后说说专业</h3><p>15年上学期自己转了专业，转到了网络工程，原来的专业在学校是个坑啊。现在很庆幸当初有学长提醒自己转专业。原来用树莓派做了一辆小车，匆忙之间拿去参加比赛了，后来下半年也陆陆续续参加了一些专业比赛。虽说这些比赛是省级的，但是都很水。现在很多比赛就看你演讲的怎么样，答辩的效果怎么样，却忽略背后深层次的技术，然后问你的作品“商业价值”“能不能挣钱”这些于技术本身无关的问题，这些比赛都是计算机作品的比赛啊，问这样的问题真的好吗！！现在社会上流行创新创业，这股风气也带进了学校，个人十分反感。虽然大学生头脑灵活点子多，但是被“逼”着创新创业也不太好吧。在比赛过程中，甚至看见过没有作品，只有一个ppt，答辩的时候就说自己的创意的参赛队伍！这还是计算机“作品”比赛吗？当然，也参加过机器人比赛，这种比赛能不能取得好成绩很大程度上取决于你学校肯不肯多投钱，买新的传感器和配件，不是完全看技术的比赛。现在，自己在慢慢的学习web开发。</p>
+<h3 id="新年给自己的鸡血"><a href="#新年给自己的鸡血" class="headerlink" title="新年给自己的鸡血"></a>新年给自己的鸡血</h3><p>新年，也想大致的给自己定下一些目标，努力完成吧~~</p>
+<ul>
+<li>刷题</li>
+<li>上半年完成一个项目，目前已有初步计划</li>
+<li>pyhton web上多花时间</li>
+<li>专业课程认真学</li>
+<li>参加有意义的比赛（免费旅游涨姿势，拿了奖学金又可以买机械键盘固态硬盘····hahhhhhh</li>
+<li>锻炼身体学英语</li>
+<li>出去玩玩（一个人的旅行？</li>
+<li>尝试ios开发？</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/02/19/使用hexo在GitHub搭建个人博客/" itemprop="url">
+                  使用hexo在GitHub搭建个人博客
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-02-18T17:36:43+00:00" content="2016-02-18">
+              2016-02-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/其它/" itemprop="url" rel="index">
+                    <span itemprop="name">其它</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/02/19/使用hexo在GitHub搭建个人博客/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/19/使用hexo在GitHub搭建个人博客/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>hexo是一款快速、简洁、高效的博客框架，底层基于node.js，博客编写文章采用markdown语法，网上也有很多针对hexo开发的开源博客主题，直接使用，就可以让博客变得美观。GitHub Pages免费提供静态页面托管的服务，容量为300M，对于一个博客来说，容量已经足够了，但其中也存在一个问题，github毕竟是一个国外的网站，国内访问速度有限，而且万一github被墙，我们也可以用国内的gitcafe来托管博客。<br>hexo在升级中很多地方发生了变动，很多Google的教程都是针对老版本的，自己的安装部署的时候参照老教程踩了一些坑，因此将新版本的安装具体的步骤记录下来，以飨读者：</p>
+<p><strong>环境</strong>：</p>
+<ul>
+<li>Ubuntu 14.04 LTS </li>
+<li>OS X EI Capitan</li>
+</ul>
+<h2 id="OS-X-EI-Capitan安装hexo方法"><a href="#OS-X-EI-Capitan安装hexo方法" class="headerlink" title="OS X EI Capitan安装hexo方法"></a>OS X EI Capitan安装hexo方法</h2><blockquote>
+<p>在mac下，可以使用包管理器brew来安装一些软件，方便快捷，brew管理器安装方法<a href="http://brew.sh/index_zh-cn.html" target="_blank" rel="external">链接</a>，Mac安装软件过程中，如果失败，可尝试在命令前加sudo</p>
+</blockquote>
+<p>在终端中粘帖下面代码，然后回车：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/ruby <span class="operator">-e</span> <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></span><br></pre></td></tr></table></figure>
+<h3 id="1、安装node-js"><a href="#1、安装node-js" class="headerlink" title="1、安装node.js"></a>1、安装node.js</h3><p>终端中输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install node</span><br></pre></td></tr></table></figure>
+<p>node.js也可以自己去官网下载，自行安装</p>
+<h3 id="2、安装git"><a href="#2、安装git" class="headerlink" title="2、安装git"></a>2、安装git</h3><p>安装git的目的是方便自己将博客同步到github、终端中输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install git</span><br></pre></td></tr></table></figure>
+<p>git也可以自己去官网下载，自行安装</p>
+<h3 id="3、安装hexo"><a href="#3、安装hexo" class="headerlink" title="3、安装hexo"></a>3、安装hexo</h3><p>node.js安装成功后自带了npm，因此我们用npm来安装hexo，终端中输入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo    <span class="comment">#-g为全局参数</span></span><br></pre></td></tr></table></figure>
+<p>在终端中依次输入，如果正确显示版本号，则安装成功</p>
+<ul>
+<li>node -v </li>
+<li>git varsion</li>
+<li>hexo version</li>
+</ul>
+<img src="/2016/02/19/使用hexo在GitHub搭建个人博客/macversion.png" alt="macversion.png" title="">
+<h3 id="4、本地测试博客"><a href="#4、本地测试博客" class="headerlink" title="4、本地测试博客"></a>4、本地测试博客</h3><p>在基本的环境搭建好以后，打开终端，cd到自己测试的文件夹中，依次输入如下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo init &lt;floder&gt;   <span class="comment">#&lt;floder&gt;代表你要创建的博客文件夹</span></span><br><span class="line">npm install     <span class="comment">#安装必要的依赖库</span></span><br></pre></td></tr></table></figure>
+<p>安装成功后，可以看到自动生成的文件目录为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">node_modules</span><br><span class="line">scaffolds</span><br><span class="line"><span class="built_in">source</span></span><br><span class="line">     -posts</span><br><span class="line">themes</span><br><span class="line">     -landscape  <span class="comment">#默认博客主题</span></span><br><span class="line">_config.yml</span><br><span class="line">package.json</span><br></pre></td></tr></table></figure>
+<p>接着，在终端中运行博客程序：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server   <span class="comment">#或者输入 hexo s</span></span><br></pre></td></tr></table></figure>
+<p>在终端中会显示：</p>
+<img src="/2016/02/19/使用hexo在GitHub搭建个人博客/mac.png" alt="mac.png" title="">
+<p>如果以上没有发生错误，在浏览器中打开localhost:4000可以看到生成的博客。<br>此处有一个大坑需要注意（特别对于不细心的同学）</p>
+<blockquote>
+<p>终端显示程序运行在0.0.0.0:4000,如果自己不小心就会用鼠标复制粘帖打开，或者右键直接打开url，但是此时在<br>浏览器却发现网页无显示！！！一开始我以为是环境没有配置好，少了一些依赖库，一这折腾环境，后来发现是localhost的原因，你本机上的localhost不一定是0.0.0.0,特别是你翻墙用了一些代理工具时。<br>同时，我还遇到过在safari上能正确显示网页，chrome上却无显示的问题，这都是因为localhost。</p>
+</blockquote>
+<p>如果网页能正确的显示，就可以来设置博客的主题了，主题可以自己写（愿意折腾的话），也可以直接用一些开源的主题<br>github上有很多，比如这个博客，就是用的开源hexo主题nexT构建的。</p>
+<p><strong> 关于主题，因为每个人用的都不尽相同，这里就不做过多介绍，每个热门的主题都有相应的document，可以直接用，也可以自己diy</strong></p>
+<h2 id="Ubuntu-14-04LTS-安装hexo方法"><a href="#Ubuntu-14-04LTS-安装hexo方法" class="headerlink" title="Ubuntu 14.04LTS 安装hexo方法"></a>Ubuntu 14.04LTS 安装hexo方法</h2><p>ubuntu中可以在终端直接用apt-get来安装，安装各个软件也需要注意是否需要<strong> sudo </strong>的问题</p>
+<h3 id="1、安装git"><a href="#1、安装git" class="headerlink" title="1、安装git"></a>1、安装git</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install git</span><br></pre></td></tr></table></figure>
+<h3 id="2、安装node-js"><a href="#2、安装node-js" class="headerlink" title="2、安装node.js"></a>2、安装node.js</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install nodejs</span><br></pre></td></tr></table></figure>
+<p>此种方法安装的nodejs可能版本会较低，具体看自己系统配置的软件源<br>如果担心过低，可在安装之前输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:chris-lea/node.js </span><br><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
+<p>然后再安装</p>
+<h3 id="3、安装hexo-1"><a href="#3、安装hexo-1" class="headerlink" title="3、安装hexo"></a>3、安装hexo</h3><p>在终端中输入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install -g hexo</span><br></pre></td></tr></table></figure>
+<h3 id="4、本地测试博客-1"><a href="#4、本地测试博客-1" class="headerlink" title="4、本地测试博客"></a>4、本地测试博客</h3><p>如果上述都安装好，就可以在本地测试建立博客了，方法和在OS X EI Capitan中一样，唯一需要注意的是是否需要sudo权限的问题，方法<strong>见上文</strong>。 </p>
+<h2 id="配置git"><a href="#配置git" class="headerlink" title="配置git"></a>配置git</h2><h3 id="1、设置ssh-key，"><a href="#1、设置ssh-key，" class="headerlink" title="1、设置ssh key，"></a>1、设置ssh key，</h3><p>ssh key是git提交代码到github的通行证，我们在终端中设置ssh key步骤如下（以在mac上为列）：</p>
+<p>打开终端，输入命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> \~/. ssh   <span class="comment">#这条代码可以检查电脑上是否已安装ssh key 如没有，执行下面的步骤</span></span><br></pre></td></tr></table></figure>
+<p>生成ssh key，然后输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C <span class="string">"邮件地址@youremail.com"</span>  <span class="comment">#注意大小写 按回车可见下面内容</span></span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file <span class="keyword">in</span> <span class="built_in">which</span> to save the key (/Users/DoubleD/.ssh/id\_rsa):   <span class="comment">#继续按回车可见</span></span><br><span class="line"></span><br><span class="line">Enter passphrase (empty <span class="keyword">for</span> no passphrase):\&lt;输入加密串\&gt;</span><br><span class="line">Enter same passphrase again:\&lt;再次输入加密串\&gt;</span><br></pre></td></tr></table></figure>
+<p>成功生成ssh key</p>
+<p>然后在本机上cd找到id_rsa.pub ,然后输入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat id_rsa.pub</span><br></pre></td></tr></table></figure>
+<p>就可以看见ssh key了，将其复制备用。</p>
+<h3 id="2、github建立博客仓库"><a href="#2、github建立博客仓库" class="headerlink" title="2、github建立博客仓库"></a>2、github建立博客仓库</h3><p>打开自己的github，新建一个仓库，仓库命名如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">your_github_name.github.io  <span class="comment">#一定要严格命名</span></span><br></pre></td></tr></table></figure>
+<p>然后在此github主页的<strong> settings-&gt;ssh key </strong>中可以添加生成的ssh key  将刚才复制的粘帖到输入框,保存。</p>
+<h3 id="3、git连接github"><a href="#3、git连接github" class="headerlink" title="3、git连接github"></a>3、git连接github</h3><p>上述设置好了之后，可以继续测试连接，在mac终端下输入下面内容</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure>
+<p>如果返回结果如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">he authenticity of host <span class="string">'github.com (207.97.227.239)'</span> can<span class="string">'t be established.</span><br><span class="line">RSA key fingerprint is ×××××××××××××××××××××××××××××××××××××××.</span><br><span class="line">Are you sure you want to continue connecting (yes/no)?</span></span><br></pre></td></tr></table></figure>
+<p>输入yes，最后继续配置git的用户信息，输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">"your_name"</span></span><br><span class="line">git config --global user.email  <span class="string">"your_email_address"</span></span><br></pre></td></tr></table></figure>
+<h2 id="博客上传等文章编写操作"><a href="#博客上传等文章编写操作" class="headerlink" title="博客上传等文章编写操作"></a>博客上传等文章编写操作</h2><h3 id="1、博客部署到github"><a href="#1、博客部署到github" class="headerlink" title="1、博客部署到github"></a>1、博客部署到github</h3><p>在本地测试发现博客没有问题后，就可以部署到github。<br>注意：</p>
+<blockquote>
+<p>博客上至少要有一篇文章，否则访问页面会出错。</p>
+</blockquote>
+<p>部署时，在终端博客目录执行下面目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean   <span class="comment">#清除数据以及public文件</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo g     <span class="comment">#生成网页的静态页面，部署到github的也就是这些静态页面</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo d     <span class="comment">#部署到github，这一步如果报错，则缺少依赖库，则首先执行下面操作</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+<p>最后，按照提示操作，就可以完成了，然后访问your_github_name.github.io就可以访问博客页面了。</p>
+<h3 id="2、博客文章编写等操作"><a href="#2、博客文章编写等操作" class="headerlink" title="2、博客文章编写等操作"></a>2、博客文章编写等操作</h3><p>在终端中输入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new title   <span class="comment">#title代表文章标题</span></span><br></pre></td></tr></table></figure>
+<p>就可以看到在博客source/_posts生成了一个title标题的md文件，这就是我们写文章的地方，可以用markdown语法对其进行编辑</p>
+<p>里面可以编辑文章的相关信息如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tags: <span class="string">""</span>  <span class="comment">#标签</span></span><br><span class="line">categories: <span class="string">""</span>分类</span><br><span class="line">等</span><br></pre></td></tr></table></figure>
+<p>这里值得一说的是，hexo 3版本插入图像等文件已经不能用原来的markdown语法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">！[](/test.png)   <span class="comment">#这样写是错误的</span></span><br></pre></td></tr></table></figure>
+<p>正确的写法是，在md文件里，插入这样的语法标签：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% asset_img test.jpg %&#125;</span><br></pre></td></tr></table></figure>
+<p>这样才能正确的显示图片。这里也算一个坑吧。</p>
+<p>当你编辑博客文章的时候，你一定还会想，我的图像文件该放在哪里？这里作者提供了一个解决方法，<br>先找到博客站点的配置文件_config.yml,然后将post_asset_folder修改为true：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">post_asset_folder: <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>修改成功后，当你再运行hexo g生成博客文章的时候，就会发现在_posts文件夹下多生成了一个以你文章title命名的文件夹，这个文件夹就是用来存放图像等附加资源的。</p>
+<h2 id="购买域名和dns设置"><a href="#购买域名和dns设置" class="headerlink" title="购买域名和dns设置"></a>购买域名和dns设置</h2><h3 id="1、购买域名"><a href="#1、购买域名" class="headerlink" title="1、购买域名"></a>1、购买域名</h3><p>域名购买我选择了Go Daddy，它是全球最大的域名注册商，而且十分良心支持支付宝付款。虽然go daddy页面是英语的，但是注册，购买都很简单，这里就不多介绍购买了，主要介绍dns的配置</p>
+<h3 id="2、dns"><a href="#2、dns" class="headerlink" title="2、dns"></a>2、dns</h3><p>域名解析可以使用DNSPod，可以用qq直接登录。登录后选择<strong> 域名解析-&gt;添加域名 </strong>。然后设置成如下<br><img src="/2016/02/19/使用hexo在GitHub搭建个人博客/dns.jpg" alt="dns.jpg" title=""></p>
+<p>备注：手动添加的两个A记录都是github服务器的ip，然后添加一个CNAME记录。</p>
+<p>登录go daddy 选择功能my products-&gt;点击已经购买的域名</p>
+<img src="/2016/02/19/使用hexo在GitHub搭建个人博客/dnsset.png" alt="dnsset.png" title="">
+<img src="/2016/02/19/使用hexo在GitHub搭建个人博客/servername.png" alt="servername.png" title="">
+<p>然后手动设置dns server为DNSSPod提供的server，最后配置如下：</p>
+<img src="/2016/02/19/使用hexo在GitHub搭建个人博客/ipset.png" alt="ipset.png" title="">
+<p>最后，在github博客仓库上增加一个CNAME文件，里面添加内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">your_domia.com  <span class="comment">#例如：ddragonever.com</span></span><br></pre></td></tr></table></figure>
+<h2 id="附：博客主题"><a href="#附：博客主题" class="headerlink" title="附：博客主题"></a>附：博客主题</h2><p>在本文中，没有介绍博客主题的具体配置，主要考虑到主题太多，而且每个主题都要相应的document，文档里面有很详细的介绍。这里附上github上star数比较多的几个主题链接：</p>
+<ul>
+<li><a href="https://github.com/litten/hexo-theme-yilia" target="_blank" rel="external">hexo-theme-yilia</a></li>
+<li><a href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="external">hexo_theme-next</a></li>
+<li><a href="https://github.com/LouisBarranqueiro/hexo-theme-tranquilpeak" target="_blank" rel="external">hexo-theme-tranquilpeak</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
 
   </section>
 
@@ -397,7 +896,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">4</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
