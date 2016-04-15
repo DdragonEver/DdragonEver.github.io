@@ -60,7 +60,7 @@
 <meta name="description" content="想到什么就写什么">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Ddragon's blog">
-<meta property="og:url" content="http://DdragonEver.github.io/index.html">
+<meta property="og:url" content="http://DdragonEver.github.io/tags/ECS/index.html">
 <meta property="og:site_name" content="Ddragon's blog">
 <meta property="og:description" content="想到什么就写什么">
 <meta name="twitter:card" content="summary">
@@ -83,7 +83,7 @@
   };
 </script>
 
-  <title> Ddragon's blog </title>
+  <title> 标签: ECS | Ddragon's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -112,9 +112,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left 
-   page-home 
- ">
+  <div class="container one-collumn sidebar-position-left  ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -203,160 +201,45 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
 
-    
-
-    
-    
-      
-      
-        
-        
-        
-      
-
-      
-    
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/10/阿里云ECS部署LAMP环境/" itemprop="url">
-                  阿里云ECS部署LAMP环境
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-09T16:38:00+00:00" content="2016-04-09">
-              2016-04-09
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/web/" itemprop="url" rel="index">
-                    <span itemprop="name">web</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/04/10/阿里云ECS部署LAMP环境/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/10/阿里云ECS部署LAMP环境/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>前段时间在阿里云买了台ECS服务器，学生优惠价只要9块9，价格挺良心(后来一查，腾讯云学生优惠只要1元！！！)，不过毕竟是国内的主机，限制很多，和域名连用也要备案。因为一个学长开发的一个OnlineJudge评测网站，于是就帮学长把网站部署到了阿里云主机上，方便测试。<br>网上google之，php的部署环境也有很多种，典型的LAMP（linux+apache+mysq+php），效率高的LNMP(linux+nginx+mysql+php)，还有高性能架LNAMP(linux+nginx+apache+mysql+php)，个人感觉，没有最好的架构，只有适合自己的架构，于是我选择了LAMP作为部署环境。</p>
-<p>####1、安装LAMP<br>一开始天真的想要用apt-get来安装，毕竟它很多的时候是万能的，一行命令就可以搞定安装过程，执行后报各种错误，很多的依赖包找不到。后来放弃了，用tasksel来安装，在终端下执行的命令为：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo tasksel <span class="operator"><span class="keyword">install</span> lamp-<span class="keyword">server</span></span></span><br></pre></td></tr></table></figure>
-<p>安装的过程如果报了perl error语言包得错误，就先安装依赖包，命令如下：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get <span class="operator"><span class="keyword">install</span> <span class="keyword">language</span>-pack-zh-hans</span></span><br></pre></td></tr></table></figure>
-<p>安装过程，会询问你安装mysql数据库的密码，自己设置一下就好。<br>启动apache2服务后，在浏览器下访问公网ip，可以看见apache的默认html界面，就说明安装成功了。</p>
-<p>###2、安装phpmyadmin<br>直接在ECS终端下修改数据库是一个非常耗费时间与精力的过程，因此，我们可以用一些数据库可视化管理软件来管理数据库，比如phpmyadmin，安装命令为：</p>
-<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="keyword">get</span> install phpmyadmin</span><br></pre></td></tr></table></figure>
-<p>安装过程会让你选择web服务器，我们选择apache2就可以，同时也需要设置root用户的登录密码。</p>
-<p>安装成功后，重启一下apache服务，这样会重新加载配置文件</p>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">sudo</span> service apache2 restart</span><br></pre></td></tr></table></figure>
-<p>然后在自己电脑浏览器下，通过访问公网ip/phpmyadmin，不出意外的话，就可以看见phpmyadmin的界面。当然，如果你有域名，解析后通过域名也可以访问网页了。</p>
-<p>###3、发布网站<br>apache发布网站的目录文件夹在 /var/www下，我们需要将网页的文件夹通过ftp工具上传到www目录下，然后修改apache的配置，就可以访问我们的网页了如图。<br><img src="/2016/04/10/阿里云ECS部署LAMP环境/www.png" alt="www.png" title=""><br>这里要说的一个坑是，网上很多教程说修改httpd.conf配置，我就一直找啊找 ，发现根本没有这个文件夹，后来才知道，linux的apache发行版的配置都在apache.conf这个文件夹里面，<br><img src="/2016/04/10/阿里云ECS部署LAMP环境/default.png" alt="default.png" title=""></p>
-<p>但是只设置这里并没有用，会发现访问的网页不是我们的主页，而是apache的默认主页，其实是和网页配置目录有关的信息，还存在sites-available文件夹下，我们打开它，修改000-default.conf和default-ssl.conf中的目录。<br>如图，修改成正确的路径。</p>
-<p>###4、其它一些坑</p>
-<ul>
-<li><p>我们把网页文件上传到ECS之后，要分配给系统足够的权限（比如读写权限~），不然网页会出现未知的错误</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod <span class="number">777</span>  /www   www目录替换为自己项目的目录</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>网站部署后会无法访问phpmyaddmin，因此我们要<br>在apache2.conf中添加phpmyadmin的关联代码</p>
-</li>
-</ul>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Include</span> <span class="regexp">/etc/</span>phpmyadmin<span class="regexp">/apache.conf</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>每次配置修改后，重启一下apache服务器<br>在linux上部署的坑远不止这一点 ，其它的遇到之后再更新。</li>
-</ul>
-
-          
-        
-      
+  <div id="posts" class="posts-collapse">
+    <div class="collection-title">
+      <h2 >
+        ECS
+        <small>标签</small>
+      </h2>
     </div>
 
-    <footer class="post-footer">
+    
       
 
-      
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
 
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
+      <h1 class="post-title">
+        
+            <a class="post-title-link" href="/2016/04/10/阿里云ECS部署LAMP环境/" itemprop="url">
+              
+                <span itemprop="name">阿里云ECS部署LAMP环境</span>
+              
+            </a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2016-04-09T16:38:00+00:00"
+              content="2016-04-09" >
+          04-09
+        </time>
+      </div>
+
+    </header>
   </article>
 
 
     
-
-  </section>
+  </div>
 
   
 

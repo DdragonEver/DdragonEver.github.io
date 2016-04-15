@@ -41,7 +41,7 @@
 <link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="ECS,LAMP," />
 
 
 
@@ -57,15 +57,18 @@
 
 
 
-<meta name="description" content="想到什么就写什么">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Ddragon's blog">
-<meta property="og:url" content="http://DdragonEver.github.io/index.html">
+<meta name="description" content="前段时间在阿里云买了台ECS服务器，学生优惠价只要9块9，价格挺良心(后来一查，腾讯云学生优惠只要1元！！！)，不过毕竟是国内的主机，限制很多，和域名连用也要备案。因为一个学长开发的一个OnlineJudge评测网站，于是就帮学长把网站部署到了阿里云主机上，方便测试。网上google之，php的部署环境也有很多种，典型的LAMP（linux+apache+mysq+php），效率高的LNMP(li">
+<meta property="og:type" content="article">
+<meta property="og:title" content="阿里云ECS部署LAMP环境">
+<meta property="og:url" content="http://DdragonEver.github.io/2016/04/10/阿里云ECS部署LAMP环境/index.html">
 <meta property="og:site_name" content="Ddragon's blog">
-<meta property="og:description" content="想到什么就写什么">
+<meta property="og:description" content="前段时间在阿里云买了台ECS服务器，学生优惠价只要9块9，价格挺良心(后来一查，腾讯云学生优惠只要1元！！！)，不过毕竟是国内的主机，限制很多，和域名连用也要备案。因为一个学长开发的一个OnlineJudge评测网站，于是就帮学长把网站部署到了阿里云主机上，方便测试。网上google之，php的部署环境也有很多种，典型的LAMP（linux+apache+mysq+php），效率高的LNMP(li">
+<meta property="og:image" content="http://DdragonEver.github.io/2016/04/10/阿里云ECS部署LAMP环境/www.png">
+<meta property="og:image" content="http://DdragonEver.github.io/2016/04/10/阿里云ECS部署LAMP环境/default.png">
+<meta property="og:updated_time" content="2016-04-15T12:09:52.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Ddragon's blog">
-<meta name="twitter:description" content="想到什么就写什么">
+<meta name="twitter:title" content="阿里云ECS部署LAMP环境">
+<meta name="twitter:description" content="前段时间在阿里云买了台ECS服务器，学生优惠价只要9块9，价格挺良心(后来一查，腾讯云学生优惠只要1元！！！)，不过毕竟是国内的主机，限制很多，和域名连用也要备案。因为一个学长开发的一个OnlineJudge评测网站，于是就帮学长把网站部署到了阿里云主机上，方便测试。网上google之，php的部署环境也有很多种，典型的LAMP（linux+apache+mysq+php），效率高的LNMP(li">
 
 
 
@@ -83,7 +86,7 @@
   };
 </script>
 
-  <title> Ddragon's blog </title>
+  <title> 阿里云ECS部署LAMP环境 | Ddragon's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -112,9 +115,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left 
-   page-home 
- ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -203,24 +204,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
 
+  <div id="posts" class="posts-expand">
     
-
-    
-    
-      
-      
-        
-        
-        
-      
-
-      
-    
-
-    
-      
 
   
   
@@ -240,10 +226,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/2016/04/10/阿里云ECS部署LAMP环境/" itemprop="url">
-                  阿里云ECS部署LAMP环境
-                </a>
+                阿里云ECS部署LAMP环境
               
             
           </h1>
@@ -255,7 +238,7 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-09T16:38:00+00:00" content="2016-04-09">
+            <time itemprop="dateCreated" datetime="2016-04-10T00:38:00+08:00" content="2016-04-09">
               2016-04-09
             </time>
           </span>
@@ -307,9 +290,7 @@
       
 
       
-        
-          
-            <p>前段时间在阿里云买了台ECS服务器，学生优惠价只要9块9，价格挺良心(后来一查，腾讯云学生优惠只要1元！！！)，不过毕竟是国内的主机，限制很多，和域名连用也要备案。因为一个学长开发的一个OnlineJudge评测网站，于是就帮学长把网站部署到了阿里云主机上，方便测试。<br>网上google之，php的部署环境也有很多种，典型的LAMP（linux+apache+mysq+php），效率高的LNMP(linux+nginx+mysql+php)，还有高性能架LNAMP(linux+nginx+apache+mysql+php)，个人感觉，没有最好的架构，只有适合自己的架构，于是我选择了LAMP作为部署环境。</p>
+        <p>前段时间在阿里云买了台ECS服务器，学生优惠价只要9块9，价格挺良心(后来一查，腾讯云学生优惠只要1元！！！)，不过毕竟是国内的主机，限制很多，和域名连用也要备案。因为一个学长开发的一个OnlineJudge评测网站，于是就帮学长把网站部署到了阿里云主机上，方便测试。<br>网上google之，php的部署环境也有很多种，典型的LAMP（linux+apache+mysq+php），效率高的LNMP(linux+nginx+mysql+php)，还有高性能架LNAMP(linux+nginx+apache+mysql+php)，个人感觉，没有最好的架构，只有适合自己的架构，于是我选择了LAMP作为部署环境。</p>
 <p>####1、安装LAMP<br>一开始天真的想要用apt-get来安装，毕竟它很多的时候是万能的，一行命令就可以搞定安装过程，执行后报各种错误，很多的依赖包找不到。后来放弃了，用tasksel来安装，在终端下执行的命令为：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo tasksel <span class="operator"><span class="keyword">install</span> lamp-<span class="keyword">server</span></span></span><br></pre></td></tr></table></figure>
 <p>安装的过程如果报了perl error语言包得错误，就先安装依赖包，命令如下：</p>
@@ -336,36 +317,84 @@
 <li>每次配置修改后，重启一下apache服务器<br>在linux上部署的坑远不止这一点 ，其它的遇到之后再更新。</li>
 </ul>
 
-          
-        
       
     </div>
 
     <footer class="post-footer">
       
-
+        <div class="post-tags">
+          
+            <a href="/tags/ECS/" rel="tag">#ECS</a>
+          
+            <a href="/tags/LAMP/" rel="tag">#LAMP</a>
+          
+        </div>
       
 
       
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/02/19/2015-2016年总结和新年鸡血/" rel="next" title="2015年总结和新年鸡血">
+                <i class="fa fa-chevron-left"></i> 2015年总结和新年鸡血
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
       
-        <div class="post-eof"></div>
+
+      
       
     </footer>
   </article>
 
 
-    
 
-  </section>
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/04/10/阿里云ECS部署LAMP环境/"
+     data-title="阿里云ECS部署LAMP环境"
+     data-content=""
+     data-url="http://DdragonEver.github.io/2016/04/10/阿里云ECS部署LAMP环境/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
 
-  
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
 
 
           </div>
           
 
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/04/10/阿里云ECS部署LAMP环境/"
+           data-title="阿里云ECS部署LAMP环境" data-url="http://DdragonEver.github.io/2016/04/10/阿里云ECS部署LAMP环境/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -385,8 +414,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avator.png"
@@ -475,6 +513,23 @@
       </section>
 
       
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
 
     </div>
   </aside>
@@ -555,6 +610,167 @@
 
 
   
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
 
   
 
