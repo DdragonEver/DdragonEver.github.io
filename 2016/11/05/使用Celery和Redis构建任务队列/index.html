@@ -1,0 +1,855 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Celery,Redis,Flask," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="1、flask的阻塞
+flask是一个阻塞式的框架，在flask自带的服务器中，一次只能处理一个请求。所以、使用flask开发的网站后台处理网络请求也是这样的，类似于工厂的流水线生产、一个工人只有完成自己手上当前的工作，才能接着完成流水线上过来的另一个工作。
+后台开发中，不可避免的会存在一些非常耗时的请求，比如一些IO操作，或者耗时的计算任务。这样导致上一个请求处理完成之前，服务器无法处理其它请求">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Celery和Redis构建任务队列">
+<meta property="og:url" content="http://DdragonEver.github.io/2016/11/05/使用Celery和Redis构建任务队列/index.html">
+<meta property="og:site_name" content="Ddragon's blog">
+<meta property="og:description" content="1、flask的阻塞
+flask是一个阻塞式的框架，在flask自带的服务器中，一次只能处理一个请求。所以、使用flask开发的网站后台处理网络请求也是这样的，类似于工厂的流水线生产、一个工人只有完成自己手上当前的工作，才能接着完成流水线上过来的另一个工作。
+后台开发中，不可避免的会存在一些非常耗时的请求，比如一些IO操作，或者耗时的计算任务。这样导致上一个请求处理完成之前，服务器无法处理其它请求">
+<meta property="og:image" content="http://oj387fyvl.bkt.clouddn.com/1G_over.png">
+<meta property="og:image" content="http://oj387fyvl.bkt.clouddn.com/2g_swap.png">
+<meta property="og:image" content="http://oj387fyvl.bkt.clouddn.com/redis-cli.png">
+<meta property="og:image" content="http://oj387fyvl.bkt.clouddn.com/start.png">
+<meta property="og:image" content="http://oj387fyvl.bkt.clouddn.com/receive_task.png">
+<meta property="og:image" content="http://oj387fyvl.bkt.clouddn.com/3_request.png">
+<meta property="og:updated_time" content="2017-03-26T03:44:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Celery和Redis构建任务队列">
+<meta name="twitter:description" content="1、flask的阻塞
+flask是一个阻塞式的框架，在flask自带的服务器中，一次只能处理一个请求。所以、使用flask开发的网站后台处理网络请求也是这样的，类似于工厂的流水线生产、一个工人只有完成自己手上当前的工作，才能接着完成流水线上过来的另一个工作。
+后台开发中，不可避免的会存在一些非常耗时的请求，比如一些IO操作，或者耗时的计算任务。这样导致上一个请求处理完成之前，服务器无法处理其它请求">
+<meta name="twitter:image" content="http://oj387fyvl.bkt.clouddn.com/1G_over.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 使用Celery和Redis构建任务队列 | Ddragon's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?009bb473fb966b665a58eec49a7a6dfc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Ddragon's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">coding</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                使用Celery和Redis构建任务队列
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-11-05T17:36:43+08:00" content="2016-11-05">
+              2016-11-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/web/" itemprop="url" rel="index">
+                    <span itemprop="name">web</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/11/05/使用Celery和Redis构建任务队列/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/05/使用Celery和Redis构建任务队列/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="1、flask的阻塞"><a href="#1、flask的阻塞" class="headerlink" title="1、flask的阻塞"></a>1、flask的阻塞</h3><blockquote>
+<p>flask是一个阻塞式的框架，在flask自带的服务器中，一次只能处理一个请求。所以、使用flask开发的网站后台处理网络请求也是这样的，类似于工厂的流水线生产、一个工人只有完成自己手上当前的工作，才能接着完成流水线上过来的另一个工作。</p>
+<p>后台开发中，不可避免的会存在一些非常耗时的请求，比如一些IO操作，或者耗时的计算任务。这样导致上一个请求处理完成之前，服务器无法处理其它请求，这样就造成了阻塞。虽然增加线程的数量能在一定程度上缓解这种糟糕的情况，但当并发量非常大时，多线程就显得无能为力。所以，要增加网络的响应速度，处理好耗时的操作是关键。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;在下面的图中，显示了一台小型Linux服务器的负载情况，可以看出，在设置1GB的空间作为交换空间的时候，性能任然捉襟见肘，</p>
+</blockquote>
+<p><img src="http://oj387fyvl.bkt.clouddn.com/1G_over.png" alt="1G swap"></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;在内存很小的情况下，为了避免Linux服务器宕机，设置更大的交换分区可以稍微解决燃眉之急，在设置2G的交换空间之后，情况得到了缓解<br>：<br><img src="http://oj387fyvl.bkt.clouddn.com/2g_swap.png" alt="2G swap"></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;当然，最好的情况是直接升级服务器的硬件，因为将一部分硬盘设置为交换空间，也会影响磁盘的读写性能，除了硬件升级，优化程序也能带来很大的效率提升。</p>
+<h3 id="2、了解redis"><a href="#2、了解redis" class="headerlink" title="2、了解redis"></a>2、了解redis</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;我们已经知道诸如Mysql，sqlserver，Mongodb这类的数据库，这些数据库都有一个共同点，都是将数据存储于硬盘。数据存储在硬盘中的优点是硬盘空间大，但是读写性能的低下也困扰着开发者，特别是对于一些请求量非常大但是变更很少的数据，读取的成本比较高，如果能进行缓存，可以提升很大的IO效率。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;有现实的需求，自然就有相应的工具实现。redis便是一个基于内存也可以持久化的数据库，将数据存储于内存中(当数据大小没有超过”swappability=age*log(size_in_memory)这个值时，超过了便写入硬盘），大大提高热点数据的读取效率。同时，它不仅支持key/value类型的数据，同时还提供了list，hash，set等数据结构的存储。redis的相关使用以后将会用单独的文章来写，这里就不详细描述了</p>
+<h3 id="3、Celery"><a href="#3、Celery" class="headerlink" title="3、Celery"></a>3、Celery</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;Celery是使用python编写的一个分布式系统，可以被很多语言编写的程序调用，进行异步任务队列的分发。异步，简而言之就是程序将当前要做的事情先放在后台，稍后再进行处理，缓解当前的压力。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;Celery中有一个重要的概念叫broker,我们知道，Celery中的任务是异步地移交给后台处理，那么怎么能确保系统能记住这个任务不会忘记呢，答案就是这个broker，broker便是存储任务的地方，一般使用RabbitMQ或者Redis。同时，还有一个概念是backend,Celery的异步任务是不能立即返回结果给请求的，如果需要返回结果，便可以先将结果暂存，下次请求就可以直接返回了。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;下面的图展示了任务在redis中的存储情况：<br><img src="http://oj387fyvl.bkt.clouddn.com/redis-cli.png" alt="celery-meta-data"></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;在知道Celery的工作流之后，用个简单的列子来加深一下理解:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"><span class="keyword">from</span> celery <span class="keyword">import</span> Celery</div><div class="line"></div><div class="line">celery = Celery(__name__, broker=<span class="string">'redis://127.0.0.1:6379/0'</span>, backend=<span class="string">'redis://127.0.0.1:6379/0'</span>)  <span class="comment"># 创建celery对象，任务和结果都存储在redis中</span></div><div class="line"></div><div class="line"><span class="meta">@celery.task</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">need_long_time</span><span class="params">()</span>:</span></div><div class="line">	<span class="keyword">pass</span>  <span class="comment"># 耗时的操作</span></div><div class="line">	</div><div class="line">need_long_time.delay()   <span class="comment"># 调用任务</span></div></pre></td></tr></table></figure>
+<p>在控制台中调用后，可以看到结果是一个AsyncResult：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> task <span class="keyword">import</span> need_long_time</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>need_long_time.delay()</div><div class="line">&lt;AsyncResult: <span class="number">4</span>dsade14e-kdjs<span class="number">-45</span>hj<span class="number">-90</span><span class="keyword">as</span><span class="number">-34</span>hjec7kj652&gt;</div></pre></td></tr></table></figure>
+<h3 id="4、Flask使用异步任务队列"><a href="#4、Flask使用异步任务队列" class="headerlink" title="4、Flask使用异步任务队列"></a>4、Flask使用异步任务队列</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;编写简单的Celery任务小程序很简单，但是将其集成在大型的后台项目，却会遇到一些问题。下面以集成到Flask项目中为列，介绍一下流程。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;由于我的项目使用了抽象工厂的模式，Celery如何在Flask程序中初始化并且如何进入程序上下文，便成为了一个问题，而且Celery只能处于程序上下文之中，在第一次构建之后，使用下面的命令启动单独启动Celery:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">bash</span>: <span class="selector-tag">celery</span> <span class="selector-tag">worker</span> <span class="selector-tag">-l</span> <span class="selector-tag">INFO</span> <span class="selector-tag">-A</span> <span class="selector-tag">app</span><span class="selector-class">.main</span><span class="selector-class">.create_celery</span><span class="selector-class">.celery</span> # 依据情况替换文件名</div></pre></td></tr></table></figure>
+<p>报了下面的错误：</p>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">  Traceback (most recent call last):</div><div class="line">  <span class="keyword">File</span> <span class="string">"/usr/lib/python2.7/site-packages/celery/task/trace.py"</span>, <span class="literal">line</span> <span class="number">228</span>, <span class="keyword">in</span> trace_task</div><div class="line">    R = retval = fun(*args, **kwargs)</div><div class="line">  <span class="keyword">File</span> <span class="string">"/usr/lib/python2.7/site-packages/celery/task/trace.py"</span>, <span class="literal">line</span> <span class="number">415</span>, <span class="keyword">in</span> __protected_call__</div><div class="line">    <span class="keyword">return</span> self.run(*args, **kwargs)</div><div class="line">  <span class="keyword">File</span> <span class="string">"/home/ryan/www/CG-Website/src/util/mail.py"</span>, <span class="literal">line</span> <span class="number">28</span>, <span class="keyword">in</span> send_forgot_email</div><div class="line">    msg = Message(<span class="string">"Recover your Crusade Gaming Account"</span>)</div><div class="line">  <span class="keyword">File</span> <span class="string">"/usr/lib/python2.7/site-packages/flask_mail.py"</span>, <span class="literal">line</span> <span class="number">178</span>, <span class="keyword">in</span> __init__</div><div class="line">    sender = current_app.config.get(<span class="string">"DEFAULT_MAIL_SENDER"</span>)</div><div class="line">  <span class="keyword">File</span> <span class="string">"/usr/lib/python2.7/site-packages/werkzeug/local.py"</span>, <span class="literal">line</span> <span class="number">336</span>, <span class="keyword">in</span> __getattr__</div><div class="line">    <span class="keyword">return</span> getattr(self._get_current_object(), name)</div><div class="line">  <span class="keyword">File</span> <span class="string">"/usr/lib/python2.7/site-packages/werkzeug/local.py"</span>, <span class="literal">line</span> <span class="number">295</span>, <span class="keyword">in</span> _get_current_object</div><div class="line">    <span class="keyword">return</span> self.__local()</div><div class="line">  <span class="keyword">File</span> <span class="string">"/usr/lib/python2.7/site-packages/flask/globals.py"</span>, <span class="literal">line</span> <span class="number">26</span>, <span class="keyword">in</span> _find_app</div><div class="line">    raise RuntimeError(<span class="symbol">'working</span> outside <span class="keyword">of</span> application <span class="keyword">context</span>')</div><div class="line">RuntimeError: working outside <span class="keyword">of</span> application <span class="keyword">context</span></div></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;这个错误一看便吻合了我们刚才说的Celery要运行于项目的程序上下文中，经过查阅，Flask给我们提供了相关的操作，因为python的一个进程可以运行多个应用，此时的celery作为一个应用，需要将它绑定到进程中，：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"><span class="string">"""</span></div><div class="line">    celery_worker</div><div class="line">    ~~~~~~~~~~~~</div><div class="line"></div><div class="line">    为celery创建app_context</div><div class="line">    app: 项目名</div><div class="line"></div><div class="line">"""</div><div class="line"><span class="keyword">from</span> app <span class="keyword">import</span> create_app, celery</div><div class="line"></div><div class="line">app = create_app()</div><div class="line">app.app_context().push()</div></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;做完这一步，根据项目的文件存放位置不同，除了注意这个working outside of application context的坑，还要注意python循环导包的问题，因为有celery的项目文件构成一般较复杂，稍不注意，便容易诱发这个问题。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;上面对工具链和相关问题进行了分析，下面看看运行成功的情况。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;启动Celery程序之后，控制台下会打印启动信息（出错的话错误信息也会在这里打印）：<br><img src="http://oj387fyvl.bkt.clouddn.com/start.png" alt="celery-start"></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;Celery接收任务：<br><img src="http://oj387fyvl.bkt.clouddn.com/receive_task.png" alt="celery-recive-task"></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;Celery接收多个任务,并完成一些任务，任务完成后会在控制台打印信息，当然在服务器部署的话会打印到log文件：<br><img src="http://oj387fyvl.bkt.clouddn.com/3_request.png" alt="celery-revice-mult-task"></p>
+<h3 id="5、参考"><a href="#5、参考" class="headerlink" title="5、参考"></a>5、参考</h3><ul>
+<li><a href="http://docs.jinkan.org/docs/celery/" target="_blank" rel="external">Celery官方文档</a></li>
+<li><a href="http://liyangliang.me/posts/2015/11/using-celery-with-flask/" target="_blank" rel="external">Flask中使用Celery上下文的问题</a></li>
+</ul>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Celery/" rel="tag">#Celery</a>
+          
+            <a href="/tags/Redis/" rel="tag">#Redis</a>
+          
+            <a href="/tags/Flask/" rel="tag">#Flask</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/16/使用阿里云ECS踩坑总结/" rel="next" title="使用阿里云ECS踩坑总结">
+                <i class="fa fa-chevron-left"></i> 使用阿里云ECS踩坑总结
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/26/了解跨域资源共享/" rel="prev" title="了解跨域资源共享">
+                了解跨域资源共享 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/11/05/使用Celery和Redis构建任务队列/"
+     data-title="使用Celery和Redis构建任务队列"
+     data-content=""
+     data-url="http://DdragonEver.github.io/2016/11/05/使用Celery和Redis构建任务队列/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/11/05/使用Celery和Redis构建任务队列/"
+           data-title="使用Celery和Redis构建任务队列" data-url="http://DdragonEver.github.io/2016/11/05/使用Celery和Redis构建任务队列/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avator.png"
+               alt="Ddragon" />
+          <p class="site-author-name" itemprop="name">Ddragon</p>
+          <p class="site-description motion-element" itemprop="description">想到什么就写什么</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+          
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/DdragonEver" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5308253583/profile?topnav=1&wvr=6&is_all=1" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> Weibo
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/lai-dao-long" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 知乎
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">友情链接</p>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.kdwycz.com/" target="_blank">kdwycz's blog</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/mummyding" target="_blank">MummyDing</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://kevinwu1993.github.io/" target="_blank">KevinWu</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、flask的阻塞"><span class="nav-number">1.</span> <span class="nav-text">1、flask的阻塞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、了解redis"><span class="nav-number">2.</span> <span class="nav-text">2、了解redis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、Celery"><span class="nav-number">3.</span> <span class="nav-text">3、Celery</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、Flask使用异步任务队列"><span class="nav-number">4.</span> <span class="nav-text">4、Flask使用异步任务队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5、参考"><span class="nav-number">5.</span> <span class="nav-text">5、参考</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ddragon</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=0.5.0"></script>
+
+
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ddragonever"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+
+</body>
+</html>

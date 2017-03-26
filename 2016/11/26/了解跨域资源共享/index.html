@@ -41,7 +41,7 @@
 <link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="生活," />
+  <meta name="keywords" content="跨域," />
 
 
 
@@ -57,19 +57,23 @@
 
 
 
-<meta name="description" content="写这篇文章之前，我自己曾经犹豫过，到底还要不要写。一来16年已经快过去3个月了，二来不知道该写什么，该怎么总结，但是仔细想了想，还是写吧，趁自己对15年发生的事记忆犹新，趁现在还没开学，有时间~当然，博客的目的就是为了记录自己，而最重要的是想在新年给自己打打鸡血
-主要在生活，学习，专业上来回顾自己的这一年发生的事。15年对于我来说，充实而又有意义，很多以前没有做过的事情，在15年也尝试的做了，在这">
+<meta name="description" content="1、背景&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;之前在完成一个web项目的时候，采用了前后端分离的模式，后端采用了Flask搭建服务，前端基于React框架搭建界面。后台服务部署在了阿里云服务器，使用git来进行项目代码的更新，但是在前端通过Ajax调试后台接口的时候，却一直报错，对于第一次尝试前后分离的我们来说打击不小，最后对错误代码的分析，原来是跨域的问题。
+12//错误代码**XML">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2015年总结和新年鸡血">
-<meta property="og:url" content="http://DdragonEver.github.io/2016/02/19/2015-2016年总结和新年鸡血/index.html">
+<meta property="og:title" content="了解跨域资源共享">
+<meta property="og:url" content="http://DdragonEver.github.io/2016/11/26/了解跨域资源共享/index.html">
 <meta property="og:site_name" content="Ddragon's blog">
-<meta property="og:description" content="写这篇文章之前，我自己曾经犹豫过，到底还要不要写。一来16年已经快过去3个月了，二来不知道该写什么，该怎么总结，但是仔细想了想，还是写吧，趁自己对15年发生的事记忆犹新，趁现在还没开学，有时间~当然，博客的目的就是为了记录自己，而最重要的是想在新年给自己打打鸡血
-主要在生活，学习，专业上来回顾自己的这一年发生的事。15年对于我来说，充实而又有意义，很多以前没有做过的事情，在15年也尝试的做了，在这">
-<meta property="og:updated_time" content="2016-04-10T15:36:44.000Z">
+<meta property="og:description" content="1、背景&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;之前在完成一个web项目的时候，采用了前后端分离的模式，后端采用了Flask搭建服务，前端基于React框架搭建界面。后台服务部署在了阿里云服务器，使用git来进行项目代码的更新，但是在前端通过Ajax调试后台接口的时候，却一直报错，对于第一次尝试前后分离的我们来说打击不小，最后对错误代码的分析，原来是跨域的问题。
+12//错误代码**XML">
+<meta property="og:image" content="http://oj387fyvl.bkt.clouddn.com/reques.png">
+<meta property="og:image" content="http://oj387fyvl.bkt.clouddn.com/response.png">
+<meta property="og:image" content="http://oj387fyvl.bkt.clouddn.com/csrf.png">
+<meta property="og:updated_time" content="2017-03-26T03:33:07.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="2015年总结和新年鸡血">
-<meta name="twitter:description" content="写这篇文章之前，我自己曾经犹豫过，到底还要不要写。一来16年已经快过去3个月了，二来不知道该写什么，该怎么总结，但是仔细想了想，还是写吧，趁自己对15年发生的事记忆犹新，趁现在还没开学，有时间~当然，博客的目的就是为了记录自己，而最重要的是想在新年给自己打打鸡血
-主要在生活，学习，专业上来回顾自己的这一年发生的事。15年对于我来说，充实而又有意义，很多以前没有做过的事情，在15年也尝试的做了，在这">
+<meta name="twitter:title" content="了解跨域资源共享">
+<meta name="twitter:description" content="1、背景&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;之前在完成一个web项目的时候，采用了前后端分离的模式，后端采用了Flask搭建服务，前端基于React框架搭建界面。后台服务部署在了阿里云服务器，使用git来进行项目代码的更新，但是在前端通过Ajax调试后台接口的时候，却一直报错，对于第一次尝试前后分离的我们来说打击不小，最后对错误代码的分析，原来是跨域的问题。
+12//错误代码**XML">
+<meta name="twitter:image" content="http://oj387fyvl.bkt.clouddn.com/reques.png">
 
 
 
@@ -87,7 +91,7 @@
   };
 </script>
 
-  <title> 2015年总结和新年鸡血 | Ddragon's blog </title>
+  <title> 了解跨域资源共享 | Ddragon's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -237,7 +241,7 @@
             
             
               
-                2015年总结和新年鸡血
+                了解跨域资源共享
               
             
           </h1>
@@ -249,38 +253,19 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-02-19T05:39:45+08:00" content="2016-02-18">
-              2016-02-18
+            <time itemprop="dateCreated" datetime="2016-11-26T07:58:11+08:00" content="2016-11-25">
+              2016-11-25
             </time>
           </span>
 
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/其它/" itemprop="url" rel="index">
-                    <span itemprop="name">其它</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
           
 
           
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/02/19/2015-2016年总结和新年鸡血/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/19/2015-2016年总结和新年鸡血/" itemprop="commentsCount"></span>
+                <a href="/2016/11/26/了解跨域资源共享/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/26/了解跨域资源共享/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -301,25 +286,41 @@
       
 
       
-        <p>写这篇文章之前，我自己曾经犹豫过，到底还要不要写。一来16年已经快过去3个月了，二来不知道该写什么，该怎么总结，但是仔细想了想，还是写吧，趁自己对15年发生的事记忆犹新，趁现在还没开学，有时间~当然，博客的目的就是为了记录自己，而最重要的是想在新年给自己打打鸡血</p>
-<p>主要在生活，学习，专业上来回顾自己的这一年发生的事。15年对于我来说，充实而又有意义，很多以前没有做过的事情，在15年也尝试的做了，在这一年，学到了更多的知识，认识了更多有趣的人，去了更远的地方。</p>
-<h3 id="先来说说生活"><a href="#先来说说生活" class="headerlink" title="先来说说生活"></a>先来说说生活</h3><p>15年完成了大一下学期到大二上学期，学弟变成了学长的转变，总体而言，在对大学新鲜感神秘感退却以后，生活也慢慢的回归了平静，把更多的时间放在自己想做的事情上。因为课程的增加，自然没有大一上学期那般悠闲，自己自由的时间在变少，这一点在刚开学的时候就感受到了。虽然时间变少，可自己做的事情却比以前更多了。而且以前自己种的果也要自己吃，刚来大学的时候，自己怀着热情报名参加了很多社团，有一些要面试的社团也神奇的通过了。因此最后，我同时参加了三个社团，校青协、校职协还有计算机科学协会（acs）。对于前两个社团，自己一直都是酱油般的存在，很少参加活动，但是到了后来，自己仔细一想，发现良心上过不去。毕竟当时是自己报名参加的，既然参加了，就应该把该有的职责给承担起来，不能逃避。于是又主动的参加了一些活动，有些活动有意义，但更多的活动是没有意义的、比如让你写个无意义的策划，做个word。正因为社团无聊的活动太多，于是到了后来，大家对社团的热情都不高了，很多活动都没有人参加，这时候我们就被逼着参加，对于逼大家参加活动这种方式，我个人是非常反感的。不过这也让我更加相信了一句话</p>
-<blockquote>
-<p><strong>大学的很多社团都是松散的，无纪律的，虽然社团能成就一些人，可对于更多的人来说，参加社团活动就是浪费时间，完全学不到什么。</strong></p>
-</blockquote>
-<p>但是其中acs却让我感受到了不同，里面的学长学姐不会教你这个社会的”大道理”，而是真诚的对待你，会把生活学习中的曾经遇到过的些坑告诉你。正因为如此，我课余的时间都待在协会这边的工作室，在这里，大家因为志趣相投而聚在一起。也许是自己在这边做事比较认真，也许是其它原因，学长们慢慢地让我去组织一些大型活动。比如6月的校程序设计大赛，自己作为组织者之一，看着活动办好了，意义也很大，心里说不出的高兴。再后来，自己也成为了这个协会的管理者，责任越来越大。但自己管理半年之后，现在再看，凭心而论，自己确实没有把协会带好，这里面有很多的原因，更多的原因是自己，也在趁过年的时间好好反思。<br> 15年自己也去了一些地方，暑假参加学校的三下乡活动，跨院联合20多人到婺源太白镇教小孩子们学习一些知识，短暂的十几天，我们给小镇带去一些活力。活动还是很有意义的，每天去学校的时候，都可以看见小孩子们很开心，帮村民修电脑也是有意义的事情。三下乡活动结束后，自己回家安静了几天，就和朋友们一起去了广州，在那里度过了5天。前几天还在婺源农村，瞬间就到了发达的广州，由破败到金碧辉煌灯红酒绿，自己的心理有很大的落差，有的时候也会感叹为何社会发展差距如此之大（好像忧国忧民也没有用，还是好好学习吧～）。在玩的几天中，更加认识到，想要到大城市立足，自己需要付出很多的努力。就像老话说的那样，付出不一定有收获，但是不付出一定没有收获。<br> 社团生活说了很多，主要是它的确占了我生活很大一部分吧，那啥就不说了，感觉自己是注孤生的存在。。。</p>
-<h3 id="再来说说学习"><a href="#再来说说学习" class="headerlink" title="再来说说学习"></a>再来说说学习</h3><p>学习上，这一年自己没有认真去看书，上课也不知道自己干了什么，考试也是期末临时突击，这样没有挂科已是万幸。自己清楚以后读研的可能性不大，因此学习上没多花时间我倒也是心安理得。不过，谁能告诉我，课堂的时间我都干什么去了！！！是该好好想一下这个问题，好好的利用课堂时间做点什么，不要白白浪费了自己还不知道。同时，专业主干课该学的还是要认真学，比如计算机网络（虽然这门已经学完了）这些课的很多知识在自己编程开发过程中都会遇到，不能小看。专业学习因为自己刚来的时候嚷嚷着想学硬件，也学习一些知识，用树莓派做了一些东西。但技术含量不高，同时，因为学校缺少这方面的老师，自学资料少，感觉走下去难度太大。因此有意提高自己对Python的运用能力，因为Python能做好多事。经过几个学期的学习，意识到，cs本科的基础课程数据结构/算法对自己来说非常有用，自己也要尝试刷点题目，把基础学好，再针对某一个就业方面深入学习， 才是正道。</p>
-<h3 id="最后说说专业"><a href="#最后说说专业" class="headerlink" title="最后说说专业"></a>最后说说专业</h3><p>15年上学期自己转了专业，转到了网络工程，原来的专业在学校是个坑啊。现在很庆幸当初有学长提醒自己转专业。原来用树莓派做了一辆小车，匆忙之间拿去参加比赛了，后来下半年也陆陆续续参加了一些专业比赛。虽说这些比赛是省级的，但是都很水。现在很多比赛就看你演讲的怎么样，答辩的效果怎么样，却忽略背后深层次的技术，然后问你的作品“商业价值”“能不能挣钱”这些于技术本身无关的问题，这些比赛都是计算机作品的比赛啊，问这样的问题真的好吗！！现在社会上流行创新创业，这股风气也带进了学校，个人十分反感。虽然大学生头脑灵活点子多，但是被“逼”着创新创业也不太好吧。在比赛过程中，甚至看见过没有作品，只有一个ppt，答辩的时候就说自己的创意的参赛队伍！这还是计算机“作品”比赛吗？当然，也参加过机器人比赛，这种比赛能不能取得好成绩很大程度上取决于你学校肯不肯多投钱，买新的传感器和配件，不是完全看技术的比赛。现在，自己在慢慢的学习web开发。</p>
-<h3 id="新年给自己的鸡血"><a href="#新年给自己的鸡血" class="headerlink" title="新年给自己的鸡血"></a>新年给自己的鸡血</h3><p>新年，也想大致的给自己定下一些目标，努力完成吧~~</p>
+        <h3 id="1、背景"><a href="#1、背景" class="headerlink" title="1、背景"></a>1、背景</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;之前在完成一个web项目的时候，采用了前后端分离的模式，后端采用了Flask搭建服务，前端基于React框架搭建界面。后台服务部署在了阿里云服务器，使用git来进行项目代码的更新，但是在前端通过Ajax调试后台接口的时候，却一直报错，对于第一次尝试前后分离的我们来说打击不小，最后对错误代码的分析，原来是跨域的问题。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//错误代码</span></div><div class="line">**XMLHttpRequest cannot load api<span class="selector-class">.jxnugo</span><span class="selector-class">.com</span>/course. No <span class="string">'Access-Control-Allow-Origin'</span> <span class="selector-tag">header</span> is present on the requested resource. Origin <span class="string">''</span> is therefore not allowed access.**</div></pre></td></tr></table></figure>
+<h3 id="2、什么是跨域"><a href="#2、什么是跨域" class="headerlink" title="2、什么是跨域"></a>2、什么是跨域</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;要说跨域，首先要了解Ajax(Asynchronous JavaScript+XML),它的核心是XMLHttpRequest（XHR）对象，这个技术使得我们的界面无需刷新便可以异步地从服务器获得数据，从而更新DOM。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;跨域给开发者带来了很多的方便，同时也出现了一些弊端，XHR对象是实现Ajax通信的主要方式，而这样就带来了跨域安全的问题。在默认的情况下，XHR对象只能访问与包含它的页面处于同一个域中的资源，也就是在协议，域名，端口完全相同的情况中，是不会出现跨域的问题。这样做的目的是为了保证页面的安全性，防止界面受到外部资源的干扰，比如恶意代码的注入。但是不可避免的，在实际使用中，有时还是需要使用一些其它的外部资源，为了解决这个问题。w3c就制定了一套标准，使得浏览器和服务器之间在跨域可以相互沟通。</p>
+<h3 id="3、跨域协商机制"><a href="#3、跨域协商机制" class="headerlink" title="3、跨域协商机制"></a>3、跨域协商机制</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;每一次Ajax请求都会发送HTTP请求，因为，协商机制也就体现在了HTTP报文中，HTTP头部定义了很多可以用来浏览器和服务器协商的字段，通过这些字段，能让服务器对浏览器的请求作出成功或者失败的响应。下面来了解一些浏览器和服务器端经常使用的一些http首部字段：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;浏览器端http报文中一些常见的头部如下：</p>
 <ul>
-<li>刷题</li>
-<li>上半年完成一个项目，目前已有初步计划</li>
-<li>pyhton web上多花时间</li>
-<li>专业课程认真学</li>
-<li>参加有意义的比赛（免费旅游涨姿势，拿了奖学金又可以买机械键盘固态硬盘····hahhhhhh</li>
-<li>锻炼身体学英语</li>
-<li>出去玩玩（一个人的旅行？</li>
-<li>尝试ios开发？</li>
+<li>Accept 浏览器能够处理的内容类型，比如Json</li>
+<li>Accept-Charset 浏览器能够处理的字符类型</li>
+<li>Accept-Encoding: 能够处理的压缩编码类型，如gzip</li>
+<li>Accept-Language: 浏览器当前设置的语言</li>
+<li>Connection: 连接类型，比如keep-alive 长连接</li>
+<li>Content-type: 内容的类型</li>
+<li>Host： 目标主机名</li>
+<li>Origin: 源</li>
+<li>Referer: 发出请求页面的url</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;举个浏览器请求头部的例子</p>
+<p><img src="http://oj387fyvl.bkt.clouddn.com/reques.png" alt="浏览器请求"></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;服务器端http报文中一些常见的响应头部如下：</p>
+<ul>
+<li>Access-Control-Allow-Origin: 允许哪个域对资源进行访问，允许全部用*</li>
+<li>Connection连接的类型</li>
+<li>Content-Encoding: 编码格式，压缩数据有利于减少阐述时间，浏览器接受后解码</li>
+<li>Server: 服务器类型</li>
+<li>Vary:主要用户缓存服务器对于内容压缩的使用，服务器使用浏览器能接受的压缩方式</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;举个服务端响应的例子</p>
+<p><img src="http://oj387fyvl.bkt.clouddn.com/response.png" alt="服务端响应请求"></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;从上面可以看出，浏览器和服务器对于跨域的协商主要是在Access-Control-Allow-Origin这个值的设置，服务端只有设置了这个字段，才能对资源进行跨域访问。</p>
+<h3 id="4、设置Access-Control-Allow-Origin"><a href="#4、设置Access-Control-Allow-Origin" class="headerlink" title="4、设置Access-Control-Allow-Origin"></a>4、设置Access-Control-Allow-Origin</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;在对跨域有了一定的了解之后，对自己项目进行http报文头部分析，发现请求和相应并不在同一个域，而服务端也并未对跨域的相关协商字段进行设置，导致了程序的报错。<br>&nbsp;&nbsp;&nbsp;&nbsp;结合下面的图可以看出，不在同一个域<br><img src="http://oj387fyvl.bkt.clouddn.com/csrf.png" alt="错误的原因"><br>弄清楚了原因，解决方法也很容易就想到了，只要要设置服务端跨域响应的字段，在python中使用装饰器的实现如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> wraps</div><div class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> make_response</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">allow_cross_domain</span><span class="params">(fun)</span>:</span></div><div class="line"><span class="meta">    @wraps(fun)</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper_fun</span><span class="params">(*args, **kwargs)</span>:</span></div><div class="line">        req = make_response(fun(*args, **kwargs))</div><div class="line">        req[<span class="string">'Access-Control-Allow-Origin'</span>] = <span class="string">'*'</span>  <span class="comment"># '*'代码允许任意请求</span></div><div class="line">        req[<span class="string">'Access-Control-Allow-Methods'</span>] = <span class="string">'PUT,GET,POST,DELETE'</span></div><div class="line">        req[<span class="string">'Access-Control-Allow-Headers'</span>] = allow_headers</div><div class="line">        <span class="keyword">return</span> req</div><div class="line">    <span class="keyword">return</span> wrapper_fun</div></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;在路由下添加装饰器即可，如果觉得麻烦，在Flask中也可以使用一个第三方插件，<a href="https://github.com/corydolphin/flask-cors" target="_blank" rel="external">fLask-cors</a>。当然，这里只介绍了一种方式，其实还有很多方式可以解决跨域的问题，比如在Nginx代理中设置Access-Control-Allow-Origin字段，或者使用JSONP,WebSocket都可以。</p>
+<h3 id="5、参考"><a href="#5、参考" class="headerlink" title="5、参考"></a>5、参考</h3><ul>
+<li><a href="https://book.douban.com/subject/10546125/" target="_blank" rel="external">JavaScript高级程序设计(第三版)</a></li>
 </ul>
 
       
@@ -329,7 +330,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/生活/" rel="tag">#生活</a>
+            <a href="/tags/跨域/" rel="tag">#跨域</a>
           
         </div>
       
@@ -338,16 +339,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/02/19/使用hexo在GitHub搭建个人博客/" rel="next" title="使用hexo在GitHub搭建个人博客">
-                <i class="fa fa-chevron-left"></i> 使用hexo在GitHub搭建个人博客
+              <a href="/2016/11/05/使用Celery和Redis构建任务队列/" rel="next" title="使用Celery和Redis构建任务队列">
+                <i class="fa fa-chevron-left"></i> 使用Celery和Redis构建任务队列
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/04/10/阿里云ECS部署LAMP环境/" rel="prev" title="阿里云ECS部署LAMP环境">
-                阿里云ECS部署LAMP环境 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/02/19/python编程美学/" rel="prev" title="python的编程美学">
+                python的编程美学 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -363,10 +364,10 @@
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2016/02/19/2015-2016年总结和新年鸡血/"
-     data-title="2015年总结和新年鸡血"
+        <div class="ds-share flat" data-thread-key="2016/11/26/了解跨域资源共享/"
+     data-title="了解跨域资源共享"
      data-content=""
-     data-url="http://DdragonEver.github.io/2016/02/19/2015-2016年总结和新年鸡血/">
+     data-url="http://DdragonEver.github.io/2016/11/26/了解跨域资源共享/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -396,8 +397,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/19/2015-2016年总结和新年鸡血/"
-           data-title="2015年总结和新年鸡血" data-url="http://DdragonEver.github.io/2016/02/19/2015-2016年总结和新年鸡血/">
+      <div class="ds-thread" data-thread-key="2016/11/26/了解跨域资源共享/"
+           data-title="了解跨域资源共享" data-url="http://DdragonEver.github.io/2016/11/26/了解跨域资源共享/">
       </div>
     
   </div>
@@ -533,7 +534,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#先来说说生活"><span class="nav-number">1.</span> <span class="nav-text">先来说说生活</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#再来说说学习"><span class="nav-number">2.</span> <span class="nav-text">再来说说学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最后说说专业"><span class="nav-number">3.</span> <span class="nav-text">最后说说专业</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新年给自己的鸡血"><span class="nav-number">4.</span> <span class="nav-text">新年给自己的鸡血</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、背景"><span class="nav-number">1.</span> <span class="nav-text">1、背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、什么是跨域"><span class="nav-number">2.</span> <span class="nav-text">2、什么是跨域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、跨域协商机制"><span class="nav-number">3.</span> <span class="nav-text">3、跨域协商机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、设置Access-Control-Allow-Origin"><span class="nav-number">4.</span> <span class="nav-text">4、设置Access-Control-Allow-Origin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5、参考"><span class="nav-number">5.</span> <span class="nav-text">5、参考</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
