@@ -57,22 +57,21 @@
 
 
 
-<meta name="description" content="1、背景&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;之前在完成一个web项目的时候，采用了前后端分离的模式，后端采用了Flask搭建服务，前端基于React框架搭建界面。后台服务部署在了阿里云服务器，使用git来进行项目代码的更新，但是在前端通过Ajax调试后台接口的时候，却一直报错，对于第一次尝试前后分离的我们来说打击不小，最后对错误代码的分析，原来是跨域的问题。
-12//错误代码**XML">
+<meta name="description" content="1、背景&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;之前在完成一个web项目的时候，采用了前后端分离的模式，后端采用了Flask搭建服务，前端基于React框架搭建界面。后台服务部署在了阿里云服务器，使用git来进行项目代码的更新，但是在前端通过Ajax调试后台接口的时候，却一直报错，对于第一次尝试前后分离的我们来说打击不小，最后对错误代码的分析，原来是跨域的问题。 12//错误代码**XML">
+<meta name="keywords" content="跨域">
 <meta property="og:type" content="article">
 <meta property="og:title" content="了解跨域资源共享">
 <meta property="og:url" content="http://DdragonEver.github.io/2016/11/26/了解跨域资源共享/index.html">
-<meta property="og:site_name" content="Ddragon's blog">
-<meta property="og:description" content="1、背景&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;之前在完成一个web项目的时候，采用了前后端分离的模式，后端采用了Flask搭建服务，前端基于React框架搭建界面。后台服务部署在了阿里云服务器，使用git来进行项目代码的更新，但是在前端通过Ajax调试后台接口的时候，却一直报错，对于第一次尝试前后分离的我们来说打击不小，最后对错误代码的分析，原来是跨域的问题。
-12//错误代码**XML">
+<meta property="og:site_name" content="Ddragon&#39;s blog">
+<meta property="og:description" content="1、背景&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;之前在完成一个web项目的时候，采用了前后端分离的模式，后端采用了Flask搭建服务，前端基于React框架搭建界面。后台服务部署在了阿里云服务器，使用git来进行项目代码的更新，但是在前端通过Ajax调试后台接口的时候，却一直报错，对于第一次尝试前后分离的我们来说打击不小，最后对错误代码的分析，原来是跨域的问题。 12//错误代码**XML">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://oj387fyvl.bkt.clouddn.com/reques.png">
 <meta property="og:image" content="http://oj387fyvl.bkt.clouddn.com/response.png">
 <meta property="og:image" content="http://oj387fyvl.bkt.clouddn.com/csrf.png">
 <meta property="og:updated_time" content="2017-03-26T03:33:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="了解跨域资源共享">
-<meta name="twitter:description" content="1、背景&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;之前在完成一个web项目的时候，采用了前后端分离的模式，后端采用了Flask搭建服务，前端基于React框架搭建界面。后台服务部署在了阿里云服务器，使用git来进行项目代码的更新，但是在前端通过Ajax调试后台接口的时候，却一直报错，对于第一次尝试前后分离的我们来说打击不小，最后对错误代码的分析，原来是跨域的问题。
-12//错误代码**XML">
+<meta name="twitter:description" content="1、背景&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;之前在完成一个web项目的时候，采用了前后端分离的模式，后端采用了Flask搭建服务，前端基于React框架搭建界面。后台服务部署在了阿里云服务器，使用git来进行项目代码的更新，但是在前端通过Ajax调试后台接口的时候，却一直报错，对于第一次尝试前后分离的我们来说打击不小，最后对错误代码的分析，原来是跨域的问题。 12//错误代码**XML">
 <meta name="twitter:image" content="http://oj387fyvl.bkt.clouddn.com/reques.png">
 
 
@@ -287,7 +286,7 @@
 
       
         <h3 id="1、背景"><a href="#1、背景" class="headerlink" title="1、背景"></a>1、背景</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;之前在完成一个web项目的时候，采用了前后端分离的模式，后端采用了Flask搭建服务，前端基于React框架搭建界面。后台服务部署在了阿里云服务器，使用git来进行项目代码的更新，但是在前端通过Ajax调试后台接口的时候，却一直报错，对于第一次尝试前后分离的我们来说打击不小，最后对错误代码的分析，原来是跨域的问题。</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//错误代码</span></div><div class="line">**XMLHttpRequest cannot load api<span class="selector-class">.jxnugo</span><span class="selector-class">.com</span>/course. No <span class="string">'Access-Control-Allow-Origin'</span> <span class="selector-tag">header</span> is present on the requested resource. Origin <span class="string">''</span> is therefore not allowed access.**</div></pre></td></tr></table></figure>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//错误代码</span></span><br><span class="line">**XMLHttpRequest cannot load api<span class="selector-class">.jxnugo</span><span class="selector-class">.com</span>/course. No <span class="string">'Access-Control-Allow-Origin'</span> <span class="selector-tag">header</span> is present on the requested resource. Origin <span class="string">''</span> is therefore not allowed access.**</span><br></pre></td></tr></table></figure>
 <h3 id="2、什么是跨域"><a href="#2、什么是跨域" class="headerlink" title="2、什么是跨域"></a>2、什么是跨域</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;要说跨域，首先要了解Ajax(Asynchronous JavaScript+XML),它的核心是XMLHttpRequest（XHR）对象，这个技术使得我们的界面无需刷新便可以异步地从服务器获得数据，从而更新DOM。</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;跨域给开发者带来了很多的方便，同时也出现了一些弊端，XHR对象是实现Ajax通信的主要方式，而这样就带来了跨域安全的问题。在默认的情况下，XHR对象只能访问与包含它的页面处于同一个域中的资源，也就是在协议，域名，端口完全相同的情况中，是不会出现跨域的问题。这样做的目的是为了保证页面的安全性，防止界面受到外部资源的干扰，比如恶意代码的注入。但是不可避免的，在实际使用中，有时还是需要使用一些其它的外部资源，为了解决这个问题。w3c就制定了一套标准，使得浏览器和服务器之间在跨域可以相互沟通。</p>
 <h3 id="3、跨域协商机制"><a href="#3、跨域协商机制" class="headerlink" title="3、跨域协商机制"></a>3、跨域协商机制</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;每一次Ajax请求都会发送HTTP请求，因为，协商机制也就体现在了HTTP报文中，HTTP头部定义了很多可以用来浏览器和服务器协商的字段，通过这些字段，能让服务器对浏览器的请求作出成功或者失败的响应。下面来了解一些浏览器和服务器端经常使用的一些http首部字段：</p>
@@ -317,10 +316,10 @@
 <p><img src="http://oj387fyvl.bkt.clouddn.com/response.png" alt="服务端响应请求"></p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;从上面可以看出，浏览器和服务器对于跨域的协商主要是在Access-Control-Allow-Origin这个值的设置，服务端只有设置了这个字段，才能对资源进行跨域访问。</p>
 <h3 id="4、设置Access-Control-Allow-Origin"><a href="#4、设置Access-Control-Allow-Origin" class="headerlink" title="4、设置Access-Control-Allow-Origin"></a>4、设置Access-Control-Allow-Origin</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;在对跨域有了一定的了解之后，对自己项目进行http报文头部分析，发现请求和相应并不在同一个域，而服务端也并未对跨域的相关协商字段进行设置，导致了程序的报错。<br>&nbsp;&nbsp;&nbsp;&nbsp;结合下面的图可以看出，不在同一个域<br><img src="http://oj387fyvl.bkt.clouddn.com/csrf.png" alt="错误的原因"><br>弄清楚了原因，解决方法也很容易就想到了，只要要设置服务端跨域响应的字段，在python中使用装饰器的实现如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> wraps</div><div class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> make_response</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">allow_cross_domain</span><span class="params">(fun)</span>:</span></div><div class="line"><span class="meta">    @wraps(fun)</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper_fun</span><span class="params">(*args, **kwargs)</span>:</span></div><div class="line">        req = make_response(fun(*args, **kwargs))</div><div class="line">        req[<span class="string">'Access-Control-Allow-Origin'</span>] = <span class="string">'*'</span>  <span class="comment"># '*'代码允许任意请求</span></div><div class="line">        req[<span class="string">'Access-Control-Allow-Methods'</span>] = <span class="string">'PUT,GET,POST,DELETE'</span></div><div class="line">        req[<span class="string">'Access-Control-Allow-Headers'</span>] = allow_headers</div><div class="line">        <span class="keyword">return</span> req</div><div class="line">    <span class="keyword">return</span> wrapper_fun</div></pre></td></tr></table></figure>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;在路由下添加装饰器即可，如果觉得麻烦，在Flask中也可以使用一个第三方插件，<a href="https://github.com/corydolphin/flask-cors" target="_blank" rel="external">fLask-cors</a>。当然，这里只介绍了一种方式，其实还有很多方式可以解决跨域的问题，比如在Nginx代理中设置Access-Control-Allow-Origin字段，或者使用JSONP,WebSocket都可以。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">from functools <span class="keyword">import</span> wraps</span><br><span class="line">from flask <span class="keyword">import</span> make_response</span><br><span class="line"></span><br><span class="line">def allow_cross_domain(<span class="function"><span class="keyword">fun</span>):</span></span><br><span class="line">    <span class="meta">@wraps(fun)</span></span><br><span class="line">    def wrapper_fun(*args, **kwargs):</span><br><span class="line">        req = make_response(<span class="function"><span class="title">fun</span><span class="params">(*args, **kwargs)</span></span>)</span><br><span class="line">        req[<span class="string">'Access-Control-Allow-Origin'</span>] = <span class="string">'*'</span>  # <span class="string">'*'</span>代码允许任意请求</span><br><span class="line">        req[<span class="string">'Access-Control-Allow-Methods'</span>] = <span class="string">'PUT,GET,POST,DELETE'</span></span><br><span class="line">        req[<span class="string">'Access-Control-Allow-Headers'</span>] = allow_headers</span><br><span class="line">        <span class="keyword">return</span> req</span><br><span class="line">    <span class="keyword">return</span> wrapper_fun</span><br></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;在路由下添加装饰器即可，如果觉得麻烦，在Flask中也可以使用一个第三方插件，<a href="https://github.com/corydolphin/flask-cors" target="_blank" rel="noopener">fLask-cors</a>。当然，这里只介绍了一种方式，其实还有很多方式可以解决跨域的问题，比如在Nginx代理中设置Access-Control-Allow-Origin字段，或者使用JSONP,WebSocket都可以。</p>
 <h3 id="5、参考"><a href="#5、参考" class="headerlink" title="5、参考"></a>5、参考</h3><ul>
-<li><a href="https://book.douban.com/subject/10546125/" target="_blank" rel="external">JavaScript高级程序设计(第三版)</a></li>
+<li><a href="https://book.douban.com/subject/10546125/" target="_blank" rel="noopener">JavaScript高级程序设计(第三版)</a></li>
 </ul>
 
       
@@ -443,7 +442,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-count">8</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -534,7 +533,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、背景"><span class="nav-number">1.</span> <span class="nav-text">1、背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、什么是跨域"><span class="nav-number">2.</span> <span class="nav-text">2、什么是跨域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、跨域协商机制"><span class="nav-number">3.</span> <span class="nav-text">3、跨域协商机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、设置Access-Control-Allow-Origin"><span class="nav-number">4.</span> <span class="nav-text">4、设置Access-Control-Allow-Origin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5、参考"><span class="nav-number">5.</span> <span class="nav-text">5、参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、背景"><span class="nav-number">1.</span> <span class="nav-text"><a href="#1&#x3001;&#x80CC;&#x666F;" class="headerlink" title="1&#x3001;&#x80CC;&#x666F;"></a>1&#x3001;&#x80CC;&#x666F;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、什么是跨域"><span class="nav-number">2.</span> <span class="nav-text"><a href="#2&#x3001;&#x4EC0;&#x4E48;&#x662F;&#x8DE8;&#x57DF;" class="headerlink" title="2&#x3001;&#x4EC0;&#x4E48;&#x662F;&#x8DE8;&#x57DF;"></a>2&#x3001;&#x4EC0;&#x4E48;&#x662F;&#x8DE8;&#x57DF;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、跨域协商机制"><span class="nav-number">3.</span> <span class="nav-text"><a href="#3&#x3001;&#x8DE8;&#x57DF;&#x534F;&#x5546;&#x673A;&#x5236;" class="headerlink" title="3&#x3001;&#x8DE8;&#x57DF;&#x534F;&#x5546;&#x673A;&#x5236;"></a>3&#x3001;&#x8DE8;&#x57DF;&#x534F;&#x5546;&#x673A;&#x5236;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、设置Access-Control-Allow-Origin"><span class="nav-number">4.</span> <span class="nav-text"><a href="#4&#x3001;&#x8BBE;&#x7F6E;Access-Control-Allow-Origin" class="headerlink" title="4&#x3001;&#x8BBE;&#x7F6E;Access-Control-Allow-Origin"></a>4&#x3001;&#x8BBE;&#x7F6E;Access-Control-Allow-Origin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5、参考"><span class="nav-number">5.</span> <span class="nav-text"><a href="#5&#x3001;&#x53C2;&#x8003;" class="headerlink" title="5&#x3001;&#x53C2;&#x8003;"></a>5&#x3001;&#x53C2;&#x8003;</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

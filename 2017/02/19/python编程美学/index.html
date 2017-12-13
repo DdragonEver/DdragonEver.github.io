@@ -57,29 +57,19 @@
 
 
 
-<meta name="description" content="1、前言
-写python的同学会经常听到pythonic这个词，但对于这个词语具体的语义，python社区每个人都有自己的独到的见解，因为pythonic自身就是人为造的单词。结合社区的观点可以知道：pythonic是python编程中的惯用方法，也就是写出简洁，优雅的代码，写出具有python独特风格的代码。
-尝试运行下面这行代码，显示的结果便是python编程之禅
-
-1&amp;gt;&amp;gt;&amp;gt;">
+<meta name="description" content="1、前言 写python的同学会经常听到pythonic这个词，但对于这个词语具体的语义，python社区每个人都有自己的独到的见解，因为pythonic自身就是人为造的单词。结合社区的观点可以知道：pythonic是python编程中的惯用方法，也就是写出简洁，优雅的代码，写出具有python独特风格的代码。 尝试运行下面这行代码，显示的结果便是python编程之禅  1&amp;gt;&amp;gt;&amp;gt;">
+<meta name="keywords" content="python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="python的编程美学">
 <meta property="og:url" content="http://DdragonEver.github.io/2017/02/19/python编程美学/index.html">
-<meta property="og:site_name" content="Ddragon's blog">
-<meta property="og:description" content="1、前言
-写python的同学会经常听到pythonic这个词，但对于这个词语具体的语义，python社区每个人都有自己的独到的见解，因为pythonic自身就是人为造的单词。结合社区的观点可以知道：pythonic是python编程中的惯用方法，也就是写出简洁，优雅的代码，写出具有python独特风格的代码。
-尝试运行下面这行代码，显示的结果便是python编程之禅
-
-1&amp;gt;&amp;gt;&amp;gt;">
+<meta property="og:site_name" content="Ddragon&#39;s blog">
+<meta property="og:description" content="1、前言 写python的同学会经常听到pythonic这个词，但对于这个词语具体的语义，python社区每个人都有自己的独到的见解，因为pythonic自身就是人为造的单词。结合社区的观点可以知道：pythonic是python编程中的惯用方法，也就是写出简洁，优雅的代码，写出具有python独特风格的代码。 尝试运行下面这行代码，显示的结果便是python编程之禅  1&amp;gt;&amp;gt;&amp;gt;">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://oj387fyvl.bkt.clouddn.com/zenOfPython.png">
 <meta property="og:updated_time" content="2017-03-23T07:12:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="python的编程美学">
-<meta name="twitter:description" content="1、前言
-写python的同学会经常听到pythonic这个词，但对于这个词语具体的语义，python社区每个人都有自己的独到的见解，因为pythonic自身就是人为造的单词。结合社区的观点可以知道：pythonic是python编程中的惯用方法，也就是写出简洁，优雅的代码，写出具有python独特风格的代码。
-尝试运行下面这行代码，显示的结果便是python编程之禅
-
-1&amp;gt;&amp;gt;&amp;gt;">
+<meta name="twitter:description" content="1、前言 写python的同学会经常听到pythonic这个词，但对于这个词语具体的语义，python社区每个人都有自己的独到的见解，因为pythonic自身就是人为造的单词。结合社区的观点可以知道：pythonic是python编程中的惯用方法，也就是写出简洁，优雅的代码，写出具有python独特风格的代码。 尝试运行下面这行代码，显示的结果便是python编程之禅  1&amp;gt;&amp;gt;&amp;gt;">
 <meta name="twitter:image" content="http://oj387fyvl.bkt.clouddn.com/zenOfPython.png">
 
 
@@ -316,31 +306,31 @@
 <p>写python的同学会经常听到pythonic这个词，但对于这个词语具体的语义，python社区每个人都有自己的独到的见解，因为pythonic自身就是人为造的单词。结合社区的观点可以知道：pythonic是python编程中的惯用方法，也就是写出简洁，优雅的代码，写出具有python独特风格的代码。</p>
 <p>尝试运行下面这行代码，显示的结果便是python编程之禅</p>
 </blockquote>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; <span class="keyword">import</span> <span class="keyword">this</span></div></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; <span class="keyword">import</span> <span class="keyword">this</span></span><br></pre></td></tr></table></figure>
 <p><img src="http://oj387fyvl.bkt.clouddn.com/zenOfPython.png" alt="the zen of python"></p>
 <h2 id="2、举个列子"><a href="#2、举个列子" class="headerlink" title="2、举个列子"></a>2、举个列子</h2><p>大部分同学的入门语言都是c语言，这导致在写python的过程中，会不自觉地借用c语言的思想，写出类c语言风格的代码，比如在对一个数组遍历操作时， 我们使用c语言会经常这么写</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">int arr[<span class="number">4</span>]=&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;;</div><div class="line">for (int i=<span class="number">0</span>; i&lt;<span class="number">4</span>; i++)&#123;</div><div class="line">    do something(arr[i]);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int arr[<span class="number">4</span>]=&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;;</span><br><span class="line">for (int i=<span class="number">0</span>; i&lt;<span class="number">4</span>; i++)&#123;</span><br><span class="line">    do something(arr[i]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>于是，在使用python编写程序的时候，习惯性的会按照下面的方法写：</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</div><div class="line">i = <span class="number">0</span></div><div class="line"><span class="keyword">for</span> x <span class="keyword">in</span> <span class="keyword">range</span>(len(arr)):</div><div class="line">    <span class="keyword">do</span> something(arr[x])</div></pre></td></tr></table></figure>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line">i = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> <span class="keyword">range</span>(len(arr)):</span><br><span class="line">    <span class="keyword">do</span> something(arr[x])</span><br></pre></td></tr></table></figure>
 <p>python以简洁优雅著称，上面的写法并没有很好的体现这一点，在python里面，任何可迭代的对象都能用for in来进行处理，更加优雅的实现方式是：</p>
-<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</div><div class="line"><span class="keyword">for</span> <span class="keyword">element</span> <span class="keyword">in</span> arr:</div><div class="line">    <span class="built_in">do</span> something(<span class="keyword">element</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="keyword">for</span> <span class="keyword">element</span> <span class="keyword">in</span> arr:</span><br><span class="line">    <span class="built_in">do</span> something(<span class="keyword">element</span>)</span><br></pre></td></tr></table></figure>
 <p>编写更加pythonic的代码，不仅能让程序更加简洁优雅，还能提高程序的运行效率。下面介绍一些常用的更加pythonic的写法。</p>
 <h2 id="3、一些常见替代写法"><a href="#3、一些常见替代写法" class="headerlink" title="3、一些常见替代写法"></a>3、一些常见替代写法</h2><ul>
 <li>(1)、 数字交换</li>
 </ul>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">a</span> = <span class="number">1</span></div><div class="line"><span class="selector-tag">b</span> = <span class="number">2</span></div><div class="line">   <span class="selector-tag">a</span>, <span class="selector-tag">b</span> = <span class="selector-tag">b</span>, a</div></pre></td></tr></table></figure>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">a</span> = <span class="number">1</span></span><br><span class="line"><span class="selector-tag">b</span> = <span class="number">2</span></span><br><span class="line">   <span class="selector-tag">a</span>, <span class="selector-tag">b</span> = <span class="selector-tag">b</span>, a</span><br></pre></td></tr></table></figure>
 <ul>
 <li>(2)、使用字符串切片，对字符串快速操作</li>
 </ul>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attr">s</span> = <span class="string">'hello'</span></div><div class="line"><span class="attr">s_reverse</span> = s[::-<span class="number">1</span>]  # 注意字符串切片的使用非常灵活</div></pre></td></tr></table></figure>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">s</span> = <span class="string">'hello'</span></span><br><span class="line"><span class="attr">s_reverse</span> = s[::-<span class="number">1</span>]  # 注意字符串切片的使用非常灵活</span><br></pre></td></tr></table></figure>
 <ul>
 <li>(3)、字符串拼接</li>
 </ul>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attr">str_arr</span>   = [<span class="string">'hello'</span>, <span class="string">'world'</span>]</div><div class="line"><span class="attr">res</span> = <span class="string">' '</span>.join(str_arr)  # 避免使用+拼接字符串，+操作会降低程序运行效率</div></pre></td></tr></table></figure>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">str_arr</span>   = [<span class="string">'hello'</span>, <span class="string">'world'</span>]</span><br><span class="line"><span class="attr">res</span> = <span class="string">' '</span>.join(str_arr)  # 避免使用+拼接字符串，+操作会降低程序运行效率</span><br></pre></td></tr></table></figure>
 <ul>
 <li>(4)、列表生成式（快速生成有规律的列表）</li>
 </ul>
-<figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">5</span>):</div><div class="line">		<span class="built_in">print</span> x   # 使用<span class="built_in">range</span>构造了一个列表[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]并迭代它，不用手动构造。当需要构造的list非常大时，使用<span class="built_in">xrange</span>()会更好</div><div class="line"><span class="built_in">num</span> = [x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">5</span>)]   # 生成<span class="built_in">num</span> = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</div><div class="line"><span class="built_in">num</span> = [x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">5</span>) <span class="keyword">if</span> x%<span class="number">2</span> == <span class="number">0</span>]   # 在上面的基础上过滤掉奇数</div></pre></td></tr></table></figure>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">5</span>):</span><br><span class="line">		<span class="built_in">print</span> x   # 使用<span class="built_in">range</span>构造了一个列表[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]并迭代它，不用手动构造。当需要构造的list非常大时，使用<span class="built_in">xrange</span>()会更好</span><br><span class="line"><span class="built_in">num</span> = [x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">5</span>)]   # 生成<span class="built_in">num</span> = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="built_in">num</span> = [x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">5</span>) <span class="keyword">if</span> x%<span class="number">2</span> == <span class="number">0</span>]   # 在上面的基础上过滤掉奇数</span><br></pre></td></tr></table></figure>
 <ul>
 <li><p>(5)、真值判断</p>
 <p>  在python中，每种数据类型在空与非空的时候都有对应的真值与其匹配，掌握默认的真值能减    少冗余的代码：</p>
@@ -381,40 +371,40 @@
 </tr>
 </tbody>
 </table>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">x = <span class="string">'hello, world'</span></div><div class="line"><span class="keyword">if</span> x <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</div><div class="line">    <span class="keyword">pass</span></div><div class="line"><span class="keyword">if</span> x:</div><div class="line">   <span class="keyword">pass</span>       <span class="comment"># 两种等效</span></div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="string">'hello, world'</span></span><br><span class="line"><span class="keyword">if</span> x <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="keyword">if</span> x:</span><br><span class="line">   <span class="keyword">pass</span>       <span class="comment"># 两种等效</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>(6)、使用for else语句快速跳出循环</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> x <span class="keyword">in</span> range(1,5):</div><div class="line">    <span class="keyword">if</span> x == 3:</div><div class="line">        <span class="built_in">print</span> <span class="string">'find 3'</span></div><div class="line">        <span class="built_in">break</span></div><div class="line"><span class="keyword">else</span>:</div><div class="line">    <span class="built_in">print</span> <span class="string">'can not find 3!'</span>  <span class="comment"># 可以检查循环是否跳出</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> range(1,5):</span><br><span class="line">    <span class="keyword">if</span> x == 3:</span><br><span class="line">        <span class="built_in">print</span> <span class="string">'find 3'</span></span><br><span class="line">        <span class="built_in">break</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span> <span class="string">'can not find 3!'</span>  <span class="comment"># 可以检查循环是否跳出</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>(7)、zip（izip）迭代多个list</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">names = [<span class="string">'tom'</span>, <span class="string">'alice'</span>, <span class="string">'amy'</span>]</div><div class="line">grades = [100, 90, 88]</div><div class="line"><span class="keyword">for</span> name, grade <span class="keyword">in</span> zip(names, grades):</div><div class="line">	<span class="built_in">print</span> name, grade   <span class="comment"># 同时迭代了两个list</span></div><div class="line">d = dict(zip(names, grades)) <span class="comment"># 使用zip快速构造字典</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">names = [<span class="string">'tom'</span>, <span class="string">'alice'</span>, <span class="string">'amy'</span>]</span><br><span class="line">grades = [100, 90, 88]</span><br><span class="line"><span class="keyword">for</span> name, grade <span class="keyword">in</span> zip(names, grades):</span><br><span class="line">	<span class="built_in">print</span> name, grade   <span class="comment"># 同时迭代了两个list</span></span><br><span class="line">d = dict(zip(names, grades)) <span class="comment"># 使用zip快速构造字典</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>(8)、排序使用默认方法，不要自己造轮子</li>
 </ul>
-<figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">nums = [<span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">0</span>]</div><div class="line"><span class="keyword">for</span> <span class="built_in">num</span> <span class="keyword">in</span> sorted(nums):</div><div class="line">	   <span class="built_in">print</span> <span class="built_in">num</span>  # 对python而言，默认的排序方法sorted()方法效率非常高</div></pre></td></tr></table></figure>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nums = [<span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">0</span>]</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">num</span> <span class="keyword">in</span> sorted(nums):</span><br><span class="line">	   <span class="built_in">print</span> <span class="built_in">num</span>  # 对python而言，默认的排序方法sorted()方法效率非常高</span><br></pre></td></tr></table></figure>
 <ul>
 <li>(9)、字典默认值</li>
 </ul>
 <p>在访问字典的时候，访问不存在的键值程序会报KeyError的操作。解决方式可以使用字典的get()方法，当然也可以使用默认字典</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attr">d</span> = defautdict(int)</div></pre></td></tr></table></figure>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">d</span> = defautdict(int)</span><br></pre></td></tr></table></figure>
 <ul>
 <li>(10)、解构list</li>
 </ul>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</div><div class="line">a, b , c = l   # 避免使用a = l[<span class="number">0</span>] 这种写法</div></pre></td></tr></table></figure>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">a, b , c = l   # 避免使用a = l[<span class="number">0</span>] 这种写法</span><br></pre></td></tr></table></figure>
 <ul>
 <li>(11)、同时迭代对象的值和索引</li>
 </ul>
-<figure class="highlight glsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">5</span>):</div><div class="line">	<span class="keyword">do</span> something(x)  <span class="meta"># 只能取出值</span></div><div class="line"><span class="keyword">for</span> <span class="keyword">index</span>, x <span class="keyword">in</span> enumerate(range(<span class="number">1</span>, <span class="number">5</span>)):</div><div class="line">	print <span class="keyword">index</span>, x  <span class="meta"># 使用enumerate()方法可以同时取出索引和值</span></div></pre></td></tr></table></figure>
+<figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">5</span>):</span><br><span class="line">	<span class="keyword">do</span> something(x)  <span class="meta"># 只能取出值</span></span><br><span class="line"><span class="keyword">for</span> <span class="keyword">index</span>, x <span class="keyword">in</span> enumerate(range(<span class="number">1</span>, <span class="number">5</span>)):</span><br><span class="line">	print <span class="keyword">index</span>, x  <span class="meta"># 使用enumerate()方法可以同时取出索引和值</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>(12)、最后：掌握<a href="http://blog.sae.sina.com.cn/archives/4781" target="_blank" rel="external">PEP8(python增强建议)</a>的建议写法，了解python的编程风格，这是最重要的。</li>
+<li>(12)、最后：掌握<a href="http://blog.sae.sina.com.cn/archives/4781" target="_blank" rel="noopener">PEP8(python增强建议)</a>的建议写法，了解python的编程风格，这是最重要的。</li>
 </ul>
 <h2 id="4、参考资料"><a href="#4、参考资料" class="headerlink" title="4、参考资料"></a>4、参考资料</h2><ul>
-<li><a href="http://wuzhiwei.net/be_pythonic/" target="_blank" rel="external">http://wuzhiwei.net/be_pythonic/</a></li>
-<li><a href="http://blog.csdn.net/gzlaiyonghao/article/details/2762251" target="_blank" rel="external">http://blog.csdn.net/gzlaiyonghao/article/details/2762251</a></li>
-<li><a href="https://www.youtube.com/watch?v=OSGv2VnC0go" target="_blank" rel="external">https://www.youtube.com/watch?v=OSGv2VnC0go</a></li>
-<li><a href="http://blog.sae.sina.com.cn/archives/4781" target="_blank" rel="external">http://blog.sae.sina.com.cn/archives/4781</a></li>
+<li><a href="http://wuzhiwei.net/be_pythonic/" target="_blank" rel="noopener">http://wuzhiwei.net/be_pythonic/</a></li>
+<li><a href="http://blog.csdn.net/gzlaiyonghao/article/details/2762251" target="_blank" rel="noopener">http://blog.csdn.net/gzlaiyonghao/article/details/2762251</a></li>
+<li><a href="https://www.youtube.com/watch?v=OSGv2VnC0go" target="_blank" rel="noopener">https://www.youtube.com/watch?v=OSGv2VnC0go</a></li>
+<li><a href="http://blog.sae.sina.com.cn/archives/4781" target="_blank" rel="noopener">http://blog.sae.sina.com.cn/archives/4781</a></li>
 </ul>
 
       
@@ -537,7 +527,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-count">8</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -628,7 +618,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、前言"><span class="nav-number">1.</span> <span class="nav-text">1、前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、举个列子"><span class="nav-number">2.</span> <span class="nav-text">2、举个列子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3、一些常见替代写法"><span class="nav-number">3.</span> <span class="nav-text">3、一些常见替代写法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4、参考资料"><span class="nav-number">4.</span> <span class="nav-text">4、参考资料</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、前言"><span class="nav-number">1.</span> <span class="nav-text"><a href="#1&#x3001;&#x524D;&#x8A00;" class="headerlink" title="1&#x3001;&#x524D;&#x8A00;"></a>1&#x3001;&#x524D;&#x8A00;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、举个列子"><span class="nav-number">2.</span> <span class="nav-text"><a href="#2&#x3001;&#x4E3E;&#x4E2A;&#x5217;&#x5B50;" class="headerlink" title="2&#x3001;&#x4E3E;&#x4E2A;&#x5217;&#x5B50;"></a>2&#x3001;&#x4E3E;&#x4E2A;&#x5217;&#x5B50;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3、一些常见替代写法"><span class="nav-number">3.</span> <span class="nav-text"><a href="#3&#x3001;&#x4E00;&#x4E9B;&#x5E38;&#x89C1;&#x66FF;&#x4EE3;&#x5199;&#x6CD5;" class="headerlink" title="3&#x3001;&#x4E00;&#x4E9B;&#x5E38;&#x89C1;&#x66FF;&#x4EE3;&#x5199;&#x6CD5;"></a>3&#x3001;&#x4E00;&#x4E9B;&#x5E38;&#x89C1;&#x66FF;&#x4EE3;&#x5199;&#x6CD5;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4、参考资料"><span class="nav-number">4.</span> <span class="nav-text"><a href="#4&#x3001;&#x53C2;&#x8003;&#x8D44;&#x6599;" class="headerlink" title="4&#x3001;&#x53C2;&#x8003;&#x8D44;&#x6599;"></a>4&#x3001;&#x53C2;&#x8003;&#x8D44;&#x6599;</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
