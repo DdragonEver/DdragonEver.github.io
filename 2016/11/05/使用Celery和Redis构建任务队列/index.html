@@ -57,13 +57,13 @@
 
 
 
-<meta name="description" content="1、flask的阻塞 flask是一个阻塞式的框架，在flask自带的服务器中，一次只能处理一个请求。所以、使用flask开发的网站后台处理网络请求也是这样的，类似于工厂的流水线生产、一个工人只有完成自己手上当前的工作，才能接着完成流水线上过来的另一个工作。 后台开发中，不可避免的会存在一些非常耗时的请求，比如一些IO操作，或者耗时的计算任务。这样导致上一个请求处理完成之前，服务器无法处理其它请求">
+<meta name="description" content="1、flask的阻塞 flask是一个阻塞式的框架，在flask自带的服务器中，一次只能处理一个请求。所以、使用flask开发的网站后台处理网络请求也是这样的，类似于工厂的流水线生产、一个工人只有完成自己手上当前的工作，才能接着完成流水线上过来的另一个工作。   后台开发中，不可避免的会存在一些非常耗时的请求，比如一些IO操作，或者耗时的计算任务。这样导致上一个请求处理完成之前，服务器无法处理其它">
 <meta name="keywords" content="Celery,Redis,Flask">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用Celery和Redis构建任务队列">
 <meta property="og:url" content="http://DdragonEver.github.io/2016/11/05/使用Celery和Redis构建任务队列/index.html">
 <meta property="og:site_name" content="Ddragon&#39;s blog">
-<meta property="og:description" content="1、flask的阻塞 flask是一个阻塞式的框架，在flask自带的服务器中，一次只能处理一个请求。所以、使用flask开发的网站后台处理网络请求也是这样的，类似于工厂的流水线生产、一个工人只有完成自己手上当前的工作，才能接着完成流水线上过来的另一个工作。 后台开发中，不可避免的会存在一些非常耗时的请求，比如一些IO操作，或者耗时的计算任务。这样导致上一个请求处理完成之前，服务器无法处理其它请求">
+<meta property="og:description" content="1、flask的阻塞 flask是一个阻塞式的框架，在flask自带的服务器中，一次只能处理一个请求。所以、使用flask开发的网站后台处理网络请求也是这样的，类似于工厂的流水线生产、一个工人只有完成自己手上当前的工作，才能接着完成流水线上过来的另一个工作。   后台开发中，不可避免的会存在一些非常耗时的请求，比如一些IO操作，或者耗时的计算任务。这样导致上一个请求处理完成之前，服务器无法处理其它">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://oj387fyvl.bkt.clouddn.com/1G_over.png">
 <meta property="og:image" content="http://oj387fyvl.bkt.clouddn.com/2g_swap.png">
@@ -74,7 +74,7 @@
 <meta property="og:updated_time" content="2017-03-26T03:44:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Celery和Redis构建任务队列">
-<meta name="twitter:description" content="1、flask的阻塞 flask是一个阻塞式的框架，在flask自带的服务器中，一次只能处理一个请求。所以、使用flask开发的网站后台处理网络请求也是这样的，类似于工厂的流水线生产、一个工人只有完成自己手上当前的工作，才能接着完成流水线上过来的另一个工作。 后台开发中，不可避免的会存在一些非常耗时的请求，比如一些IO操作，或者耗时的计算任务。这样导致上一个请求处理完成之前，服务器无法处理其它请求">
+<meta name="twitter:description" content="1、flask的阻塞 flask是一个阻塞式的框架，在flask自带的服务器中，一次只能处理一个请求。所以、使用flask开发的网站后台处理网络请求也是这样的，类似于工厂的流水线生产、一个工人只有完成自己手上当前的工作，才能接着完成流水线上过来的另一个工作。   后台开发中，不可避免的会存在一些非常耗时的请求，比如一些IO操作，或者耗时的计算任务。这样导致上一个请求处理完成之前，服务器无法处理其它">
 <meta name="twitter:image" content="http://oj387fyvl.bkt.clouddn.com/1G_over.png">
 
 
@@ -309,9 +309,11 @@
       
         <h3 id="1、flask的阻塞"><a href="#1、flask的阻塞" class="headerlink" title="1、flask的阻塞"></a>1、flask的阻塞</h3><blockquote>
 <p>flask是一个阻塞式的框架，在flask自带的服务器中，一次只能处理一个请求。所以、使用flask开发的网站后台处理网络请求也是这样的，类似于工厂的流水线生产、一个工人只有完成自己手上当前的工作，才能接着完成流水线上过来的另一个工作。</p>
-<p>后台开发中，不可避免的会存在一些非常耗时的请求，比如一些IO操作，或者耗时的计算任务。这样导致上一个请求处理完成之前，服务器无法处理其它请求，这样就造成了阻塞。虽然增加线程的数量能在一定程度上缓解这种糟糕的情况，但当并发量非常大时，多线程就显得无能为力。所以，要增加网络的响应速度，处理好耗时的操作是关键。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;在下面的图中，显示了一台小型Linux服务器的负载情况，可以看出，在设置1GB的空间作为交换空间的时候，性能任然捉襟见肘，</p>
 </blockquote>
+<blockquote>
+<p>后台开发中，不可避免的会存在一些非常耗时的请求，比如一些IO操作，或者耗时的计算任务。这样导致上一个请求处理完成之前，服务器无法处理其它请求，这样就造成了阻塞。虽然增加线程的数量能在一定程度上缓解这种糟糕的情况，但当并发量非常大时，多线程就显得无能为力。所以，要增加网络的响应速度，处理好耗时的操作是关键。</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;在下面的图中，显示了一台小型Linux服务器的负载情况，可以看出，在设置1GB的空间作为交换空间的时候，性能任然捉襟见肘，</p>
 <p><img src="http://oj387fyvl.bkt.clouddn.com/1G_over.png" alt="1G swap"></p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;在内存很小的情况下，为了避免Linux服务器宕机，设置更大的交换分区可以稍微解决燃眉之急，在设置2G的交换空间之后，情况得到了缓解<br>：<br><img src="http://oj387fyvl.bkt.clouddn.com/2g_swap.png" alt="2G swap"></p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;当然，最好的情况是直接升级服务器的硬件，因为将一部分硬盘设置为交换空间，也会影响磁盘的读写性能，除了硬件升级，优化程序也能带来很大的效率提升。</p>
@@ -465,7 +467,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-count">12</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -556,7 +558,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、flask的阻塞"><span class="nav-number">1.</span> <span class="nav-text"><a href="#1&#x3001;flask&#x7684;&#x963B;&#x585E;" class="headerlink" title="1&#x3001;flask&#x7684;&#x963B;&#x585E;"></a>1&#x3001;flask&#x7684;&#x963B;&#x585E;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、了解redis"><span class="nav-number">2.</span> <span class="nav-text"><a href="#2&#x3001;&#x4E86;&#x89E3;redis" class="headerlink" title="2&#x3001;&#x4E86;&#x89E3;redis"></a>2&#x3001;&#x4E86;&#x89E3;redis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、Celery"><span class="nav-number">3.</span> <span class="nav-text"><a href="#3&#x3001;Celery" class="headerlink" title="3&#x3001;Celery"></a>3&#x3001;Celery</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、Flask使用异步任务队列"><span class="nav-number">4.</span> <span class="nav-text"><a href="#4&#x3001;Flask&#x4F7F;&#x7528;&#x5F02;&#x6B65;&#x4EFB;&#x52A1;&#x961F;&#x5217;" class="headerlink" title="4&#x3001;Flask&#x4F7F;&#x7528;&#x5F02;&#x6B65;&#x4EFB;&#x52A1;&#x961F;&#x5217;"></a>4&#x3001;Flask&#x4F7F;&#x7528;&#x5F02;&#x6B65;&#x4EFB;&#x52A1;&#x961F;&#x5217;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5、参考"><span class="nav-number">5.</span> <span class="nav-text"><a href="#5&#x3001;&#x53C2;&#x8003;" class="headerlink" title="5&#x3001;&#x53C2;&#x8003;"></a>5&#x3001;&#x53C2;&#x8003;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、flask的阻塞"><span class="nav-number">1.</span> <span class="nav-text">1、flask的阻塞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、了解redis"><span class="nav-number">2.</span> <span class="nav-text">2、了解redis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、Celery"><span class="nav-number">3.</span> <span class="nav-text">3、Celery</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、Flask使用异步任务队列"><span class="nav-number">4.</span> <span class="nav-text">4、Flask使用异步任务队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5、参考"><span class="nav-number">5.</span> <span class="nav-text">5、参考</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
@@ -577,8 +579,8 @@
       <div class="footer-inner">
         <div class="copyright" >
   
-  &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

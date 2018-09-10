@@ -220,15 +220,546 @@
 
     
     
+
+    
       
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2018/09/10/Java-servlet/" itemprop="url">
+                  Java servlet
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-09-10T10:00:25Z" content="2018-09-10">
+              2018-09-10
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/09/10/Java-servlet/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/09/10/Java-servlet/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
-        
-        
-        
       
 
       
+        
+          
+            <h1 id="容器和Java-web"><a href="#容器和Java-web" class="headerlink" title="容器和Java web"></a>容器和Java web</h1><h4 id="一、java-web容器规范"><a href="#一、java-web容器规范" class="headerlink" title="一、java web容器规范"></a>一、java web容器规范</h4><h5 id="1、概念"><a href="#1、概念" class="headerlink" title="1、概念"></a>1、概念</h5><ul>
+<li>web容器是能部署web应用程序的环境</li>
+<li>Tomcat容器是Java Servlet，JavaServer Pages，Java Expression Language和Java WebSocket（Java EE）技术实现</li>
+<li>Servlet是主要作用是给上级容器(Tomcat)等提供doGet()和doPost()等方法。其生命周期实例化、初始化、调用、销毁受控于Tomcat容器</li>
+<li>Java Web应用由一组Servlet、HTML页、类、以及其它可以被绑定的资源构成。它可以在各种web容器(如Tomcat)中运行。</li>
+</ul>
+<h4 id="二、Servlet"><a href="#二、Servlet" class="headerlink" title="二、Servlet"></a>二、Servlet</h4><ul>
+<li>Servlet本质上市一个java类，按照规范可以在javaweb容器中运行，对客户端的请求做出响应。</li>
+</ul>
+<h5 id="2-1、Servlet的生命周期"><a href="#2-1、Servlet的生命周期" class="headerlink" title="2.1、Servlet的生命周期"></a>2.1、Servlet的生命周期</h5><ul>
+<li>init()初始化，数据初始化 </li>
+<li>service()方法处理请求调用的实际方法，请求后把结果返回给客户端，service() 方法由容器调用，service 方法在适当的时候调用 doGet、doPost、doPut、doDelete 等方法。</li>
+<li>destory()方法结束请求</li>
+</ul>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">    <span class="comment">//service方法调用特征</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> service(ServletRequest request, </span><br><span class="line">                    ServletResponse response) </span><br><span class="line">      <span class="keyword">throws</span> ServletException, IOException&#123;</span><br><span class="line">&#125;</span><br><span class="line">   <span class="comment">//调用service之后常见的doGet doPost方法</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> doGet(HttpServletRequest request,</span><br><span class="line">                  HttpServletResponse response)</span><br><span class="line">    <span class="keyword">throws</span> ServletException, IOException &#123;</span><br><span class="line">    <span class="comment">// 处理</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="2-2、Servlet-demo"><a href="#2-2、Servlet-demo" class="headerlink" title="2.2、Servlet demo"></a>2.2、Servlet demo</h5><ul>
+<li><p>流程</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.*;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.*;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SampileServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String message;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> <span class="keyword">throws</span> ServletException</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 执行必需的初始化</span></span><br><span class="line">        message = <span class="string">" sample"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest request,</span></span></span><br><span class="line"><span class="function"><span class="params">                      HttpServletResponse response)</span></span></span><br><span class="line"><span class="function">            <span class="keyword">throws</span> ServletException, IOException</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 设置响应内容类型</span></span><br><span class="line">        response.setContentType(<span class="string">"text/html"</span>);</span><br><span class="line">        <span class="comment">// 实际的逻辑是在这里</span></span><br><span class="line">        PrintWriter out = response.getWriter();</span><br><span class="line">        out.println(<span class="string">"&lt;h1&gt;"</span> + message + <span class="string">"&lt;/h1&gt;"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在路由层配置url映射关系，类似于spring中的RequestMapping,Python flaskweb框架中的@app.route(“/index.html”)功能</p>
+</li>
+</ul>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="params">&lt;web-app&gt;</span>      </span><br><span class="line"><span class="params">&lt;servlet&gt;</span></span><br><span class="line"><span class="params">&lt;description&gt;</span><span class="params">&lt;/description&gt;</span></span><br><span class="line"><span class="params">&lt;display-name&gt;</span>HelloServlet<span class="params">&lt;/display-name&gt;</span></span><br><span class="line"><span class="params">&lt;servlet-name&gt;</span>HelloServlet<span class="params">&lt;/servlet-name&gt;</span></span><br><span class="line"><span class="params">&lt;jsp-file&gt;</span>/servlet.jsp<span class="params">&lt;/jsp-file&gt;</span></span><br><span class="line"><span class="params">&lt;/servlet&gt;</span></span><br><span class="line"> <span class="params">&lt;servlet-mapping&gt;</span></span><br><span class="line"> <span class="params">&lt;servlet-name&gt;</span>HelloServlet<span class="params">&lt;/servlet-name&gt;</span></span><br><span class="line">    <span class="params">&lt;url-pattern&gt;</span><span class="meta-keyword">/servlet/</span>HelloServlet<span class="params">&lt;/url-pattern&gt;</span></span><br><span class="line"><span class="params">&lt;/servlet-mapping&gt;</span></span><br><span class="line"><span class="params">&lt;servlet&gt;</span></span><br><span class="line"><span class="params">&lt;/web-app&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="三、Cookie和Session"><a href="#三、Cookie和Session" class="headerlink" title="三、Cookie和Session"></a>三、Cookie和Session</h4><ul>
+<li>Session保存在服务端，主要是服务端了标识用户而产生的，用于会话跟踪。</li>
+<li>Cookie，cookie是客户端发送给服务端的，session的跟踪主要也是用cookie来实现的。cookie信息一般保存在http报文信息中。</li>
+<li>在jsp中，有Cookie对象供用户调用,可以设置服务端需要的key和value</li>
+</ul>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Cookie cookie</span> = new Cookie(<span class="string">"key"</span>,<span class="string">"value"</span>);</span><br></pre></td></tr></table></figure>
+<h4 id="四、JSP"><a href="#四、JSP" class="headerlink" title="四、JSP"></a>四、JSP</h4><ul>
+<li>Java server pages一种根据服务端数据动态生成界面的技术，和很多前端模板引擎类似，jsp是一个servle程序。在界面中写入很多控制代码，来实现数据的动态渲染，之前学习过jinja2类似的模板引起，语法非常像。</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2018/09/10/反射注解与动态代理/" itemprop="url">
+                  反射注解与动态代理
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-09-10T10:00:01Z" content="2018-09-10">
+              2018-09-10
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/09/10/反射注解与动态代理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/09/10/反射注解与动态代理/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="反射，注解和动态代理，类加载"><a href="#反射，注解和动态代理，类加载" class="headerlink" title="反射，注解和动态代理，类加载"></a>反射，注解和动态代理，类加载</h1><h4 id="一、反射"><a href="#一、反射" class="headerlink" title="一、反射"></a>一、反射</h4><h5 id="1、概念"><a href="#1、概念" class="headerlink" title="1、概念"></a>1、概念</h5><ul>
+<li>java的反射机制指的是程序在运行过程中，对于类，能获取到类的属性和方法，对于对象，能够调用他的属性和方法，动态的获取数据。</li>
+</ul>
+<h5 id="1、获取类的属性和方法"><a href="#1、获取类的属性和方法" class="headerlink" title="1、获取类的属性和方法"></a>1、获取类的属性和方法</h5><ul>
+<li>假设有一个Student类，</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * class</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> &#123;</span></span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doHomeWork</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//do something</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>获取类名和属性</li>
+</ul>
+<figure class="highlight monkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.reflect.<span class="keyword">Field</span>;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> &#123;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> static void main(String[] args) &#123;</span><br><span class="line">        <span class="class"><span class="keyword">Class</span> <span class="title">stuClass</span> = <span class="title">Student</span>.<span class="title">class</span>;</span></span><br><span class="line">        System.out.println(stuClass.getName());</span><br><span class="line">        <span class="keyword">Field</span>[] fields = stuClass.getFields();</span><br><span class="line">        <span class="function"><span class="keyword">Method</span>[] <span class="title">methods</span> =</span> stuClass.getMethods();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">Field</span> <span class="keyword">field</span> : fields)&#123;</span><br><span class="line">            System.out.println(<span class="keyword">field</span>.getName());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="function"><span class="keyword">Method</span> <span class="title">method</span> :</span> methods)&#123;</span><br><span class="line">            System.out.println(<span class="function"><span class="keyword">method</span>.<span class="title">getName</span>(</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>此外，也可以访问私有方法，通过 class.getDeclaredMethod(“privateMethod”, String.class, int.class)可以获取。</li>
+</ul>
+<h4 id="二、注解"><a href="#二、注解" class="headerlink" title="二、注解"></a>二、注解</h4><ul>
+<li>注解可以使得Java源代码中可以添加功能性的实现代码，还可以添加元数据，和类于接口一样，注解也属于一种类型，使用@interface进行标记,比如定义一个Hello注解</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">import</span> <span class="selector-tag">java</span><span class="selector-class">.lang</span><span class="selector-class">.annotation</span><span class="selector-class">.ElementType</span>;</span><br><span class="line"><span class="selector-tag">import</span> <span class="selector-tag">java</span><span class="selector-class">.lang</span><span class="selector-class">.annotation</span><span class="selector-class">.Retention</span>;</span><br><span class="line"><span class="selector-tag">import</span> <span class="selector-tag">java</span><span class="selector-class">.lang</span><span class="selector-class">.annotation</span><span class="selector-class">.RetentionPolicy</span>;</span><br><span class="line"><span class="selector-tag">import</span> <span class="selector-tag">java</span><span class="selector-class">.lang</span><span class="selector-class">.annotation</span><span class="selector-class">.Target</span>;</span><br><span class="line"></span><br><span class="line">@<span class="keyword">Retention</span>(<span class="keyword">RetentionPolicy</span>.<span class="keyword">RUNTIME</span>)</span><br><span class="line">@<span class="keyword">Target</span>(<span class="keyword">ElementType</span>.<span class="keyword">METHOD</span>)</span><br><span class="line"><span class="keyword">public</span> @interface Hello &#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用场景，当类，属性和对象标记注解以后，注解的信息提取使用java反射的形式，主要给编译器以及工具类型的软件使用。</li>
+</ul>
+<h5 id="2-1-元注解"><a href="#2-1-元注解" class="headerlink" title="2.1 元注解"></a>2.1 元注解</h5><ul>
+<li>元注解是标记注解的注解，元注解可以指明注解是做什么的，常用的有：</li>
+<li>@Retention 注解的保留期，取值有RetentionPolicy.SOURCE（注解在源码期间保留）， RetentionPolicy.CLASS(保留到编译进行的时候，不会加载进jvm) RetentionPolicy.RUNTIME(保留到程序运行时)</li>
+<li>@Document 将注解的元素包含到java doc中</li>
+<li>@Target  注解使用的地方，可以指定类，属性或者方法等，有较多选择</li>
+<li>@Inherited  继承功能，当超类使用了这个注解，他的子类也会使用上这个注解。</li>
+<li>@Repeatable  可重复</li>
+</ul>
+<h4 id="三、动态代理"><a href="#三、动态代理" class="headerlink" title="三、动态代理"></a>三、动态代理</h4><ul>
+<li>代理模式，中间人模式，常见的场景是用户要做一件事情，不会自己亲自做，而是会让中介去做，帮自己实现，面向对象程序设计中很常见的设计模式。代理流程如下：<br><img src="https://s10.mogucdn.com/mlcdn/c45406/180910_09aggbed258jhcd6jac67350166f1_1542x324.jpg" alt=""></li>
+<li>动态代理可以用来做方法的功能增强，对代码无侵入，动态代理使用Proxy的静态方法newProxyInstance动态创建代理，如下</li>
+</ul>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">Object</span> newProxyInstance(ClassLoader loader,<span class="comment">//类加载器</span></span><br><span class="line">                                      <span class="keyword">Class</span>&lt;?&gt;[] interfaces, <span class="comment">//代理接口</span></span><br><span class="line">                                      InvocationHandler h)<span class="comment">//关联接口</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>要创建动态代理，核心是要实现InvocationHandler接口和invoke方法，比如，要为一个接口的功能实现进行日志打印，相关流程:</li>
+</ul>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//动态代理只能为接口创建代理</span></span><br><span class="line"><span class="keyword">interface</span> <span class="title">Work</span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">getInfo</span>(<span class="params"></span>)</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">doWork</span>(<span class="params"></span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HomeWork</span> <span class="keyword">implements</span> <span class="title">Work</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getInfo</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"收集资料"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doWork</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"正式工作"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">   <span class="comment">//增强功能</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">WorkLog</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">log</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        System.<span class="keyword">out</span>.println(<span class="string">"工作记录......"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationHandler;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WorkInvocationHandler</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Object <span class="keyword">target</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">setTarget</span><span class="params">(Object <span class="keyword">target</span>)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.<span class="keyword">target</span> = <span class="keyword">target</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//注意抛出异常，实现invoke方法</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function">Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable</span>&#123;</span><br><span class="line">        WorkLog workLog = <span class="keyword">new</span> WorkLog();</span><br><span class="line">        workLog.log();</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">return</span> method.<span class="title">invoke</span><span class="params">(<span class="keyword">target</span>, args)</span></span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">import</span> java.lang.reflect.Proxy;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyProxyFactory</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="function">Object <span class="title">getProxy</span><span class="params">(Object <span class="keyword">target</span>)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        <span class="comment">// 实例化对象</span></span><br><span class="line">        WorkInvocationHandler <span class="keyword">handler</span> = <span class="keyword">new</span> WorkInvocationHandler();</span><br><span class="line">        <span class="keyword">handler</span>.setTarget(<span class="keyword">target</span>);</span><br><span class="line">        <span class="keyword">return</span> Proxy.newProxyInstance(<span class="keyword">target</span>.getClass().getClassLoader(),</span><br><span class="line">                <span class="keyword">target</span>.getClass().getInterfaces(),<span class="keyword">handler</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 实例化一个被代理对象</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Work <span class="keyword">target</span> = <span class="keyword">new</span> HomeWork();</span><br><span class="line">        Work work = (Work) MyProxyFactory.getProxy(<span class="keyword">target</span>);</span><br><span class="line">        work.getInfo();</span><br><span class="line">        work.doWork();</span><br><span class="line">    &#125;<span class="keyword">catch</span> (Exception ignored)&#123;&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://s10.mogucdn.com/mlcdn/c45406/180910_13cb2i6a3el5a98e0i1ec0jh0e141_1102x342.jpg" alt=""></p>
+<h4 id="四、类加载机制"><a href="#四、类加载机制" class="headerlink" title="四、类加载机制"></a>四、类加载机制</h4><h5 id="1、概述"><a href="#1、概述" class="headerlink" title="1、概述"></a>1、概述</h5><ul>
+<li>Java代码需要运行，首先需要将源代码进行编译生成 .class 文件，然后 JVM 加载 .class 字节码文件到内存，而 .class 文件是怎样被加载到 JVM 中的就是Java 类加载</li>
+</ul>
+<h5 id="2、分类"><a href="#2、分类" class="headerlink" title="2、分类"></a>2、分类</h5><ul>
+<li>AppClassLoader 应用加载器，也称为系统加载器，会加载来自CLASSPATH中的类和包，默认情况下，其它类加载器会将它作为父类加载器</li>
+<li>ExtClassloader 拓展类加载器，主要加载Java的拓展类库</li>
+<li>BootStrapClassLoader 启动类加载器，是最顶层的父类加载器，主要用来加载java的核心类</li>
+</ul>
+<h5 id="3、加载过程"><a href="#3、加载过程" class="headerlink" title="3、加载过程"></a>3、加载过程</h5><ul>
+<li>加载流程如下：<br><img src="https://s10.mogucdn.com/mlcdn/c45406/180910_47ccclakc5d8d9g7k68bb4dkbl5b3_1296x400.jpg" alt=""><ul>
+<li>加载过程采用双亲委派模型，当一个类加载器收到类加载任务时，会有限交给父类处理，父类无法完成时才会尝试自行加载任务。保证了使用不同的类加载器最终得到的都是同一个对象。</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2018/09/10/Java线程/" itemprop="url">
+                  Java线程
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-09-10T09:59:33Z" content="2018-09-10">
+              2018-09-10
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/09/10/Java线程/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/09/10/Java线程/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h1><h3 id="一、概念"><a href="#一、概念" class="headerlink" title="一、概念"></a>一、概念</h3><h4 id="1、进程和线程的概念"><a href="#1、进程和线程的概念" class="headerlink" title="1、进程和线程的概念"></a>1、进程和线程的概念</h4><ul>
+<li>进程和线程都是操作系统中的概念，操作系统对进程和线程的严格定义是：进程是具有一定独立功能的程序，是系统进行资源分配和调度的独立单位。线程是进程的实体，是cpu调度和分配的基本单位。</li>
+</ul>
+<h4 id="2、进程与线程的关系"><a href="#2、进程与线程的关系" class="headerlink" title="2、进程与线程的关系"></a>2、进程与线程的关系</h4><ul>
+<li>一个线程只能属于一个进程，而一个进程可以有多个线程。    </li>
+<li>同一进程的所有线程共享该进程的资源。    </li>
+<li>线程在执行过程中，不同进程的线程间要利用消息通信的办法实现数据同步。    </li>
+</ul>
+<h4 id="3、线程的生命周期"><a href="#3、线程的生命周期" class="headerlink" title="3、线程的生命周期"></a>3、线程的生命周期</h4><ul>
+<li>主要有创建，就绪，运行，阻塞，销毁几个状态，如图：</li>
+</ul>
+<p><img src="https://s10.mogucdn.com/mlcdn/c45406/180910_3c2dik9ehd52bc7hg4d10da13e7jb_1096x446.jpg" alt=""></p>
+<h4 id="2、java与多线程"><a href="#2、java与多线程" class="headerlink" title="2、java与多线程"></a>2、java与多线程</h4><ul>
+<li>java为了提升程序性能，也引入了多线程概念，通过多线程，在一些场景能极大提升性能，实现线程主要有两种方式，一种继承Thread类，另一种实现Runable接口，<h5 id="2-1-继承Thread类型"><a href="#2-1-继承Thread类型" class="headerlink" title="2.1 继承Thread类型"></a>2.1 继承Thread类型</h5></li>
+<li>创建线程，可以通过继承Thread类并实现run()方法的形式，run()里面编写实际要运行的代码，运行时通过start（）方法将线程设为可运行态，并不是直接执行，具体调用还是要操作系统决定。</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 继承Thread</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">TestThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">String</span> threadName;</span><br><span class="line"></span><br><span class="line">    public <span class="type">TestThread</span>(<span class="type">String</span> name)&#123;</span><br><span class="line">        <span class="keyword">this</span>.threadName=name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    public void run()&#123;</span><br><span class="line">        <span class="type">System</span>.out.print(threadName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="2-2-实现Runnable接口"><a href="#2-2-实现Runnable接口" class="headerlink" title="2.2 实现Runnable接口"></a>2.2 实现Runnable接口</h5><ul>
+<li>线程类通过实现Runnable接口，实现run()方法，也能实现线程调用，和继承Thread类类似，如下：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RunnableThread</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String threadName;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RunnableThread</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.threadName=name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(threadName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="2-3-详细的启动过程"><a href="#2-3-详细的启动过程" class="headerlink" title="2.3 详细的启动过程"></a>2.3 详细的启动过程</h5><ul>
+<li>1、通过new创建一个线程对象</li>
+<li>2、调用线程对象的start()方法，使线程处理Runnable可运行状态，等待调用</li>
+<li>3、当被调用时，执行run()中的代码</li>
+<li>4、当线程因为原因在运行时放弃cpu调用时(比如被优先级高的线程抢占)，便会进入阻塞状态，当要继续运行时，需要重新进入可运行状态。</li>
+<li>5、执行完成，会进入销毁状态。</li>
+</ul>
+<h4 id="3、线程同步"><a href="#3、线程同步" class="headerlink" title="3、线程同步"></a>3、线程同步</h4><ul>
+<li>同一个进程的线程资源是共享的，当操作共享资源时，会存在问题，为了避免临界区造成的问题，线程之间需要进行同步，主要有下面几种同步方式</li>
+</ul>
+<h5 id="3-1、使用synchronized进行修饰"><a href="#3-1、使用synchronized进行修饰" class="headerlink" title="3.1、使用synchronized进行修饰"></a>3.1、使用synchronized进行修饰</h5><ul>
+<li>在需要同步的方法面前加入synchronized进行修饰，synchronized会将对象锁住，能够保证在同一时刻只有一个线程访问，在调用方法之前，需要先获得内置锁，同时，除了修饰方法，还能修饰代码块</li>
+</ul>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="function"><span class="keyword">synchronized</span> <span class="title">saveMoney</span><span class="params">()</span></span>&#123;<span class="comment">//todo somethind&#125;;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">synchronized(<span class="class"><span class="keyword">object</span>)</span>&#123;&#125;; <span class="comment">//修饰对象</span></span><br></pre></td></tr></table></figure>
+<h5 id="3-2、使用Lock锁"><a href="#3-2、使用Lock锁" class="headerlink" title="3.2、使用Lock锁"></a>3.2、使用Lock锁</h5><ul>
+<li>锁机制也能保证同一个时刻只能有一个线程进行访问,在在java.util.concurrent.locks包中有很多Lock的实现类，常用的有ReentrantLock可重入锁等</li>
+</ul>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    　Lock l = ...; <span class="comment">//lock实现对象对象</span></span><br><span class="line">l.<span class="keyword">lock</span>();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">//todo something</span></span><br><span class="line">         &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    l.unlock();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="3-3-volatile"><a href="#3-3-volatile" class="headerlink" title="3.3 volatile"></a>3.3 volatile</h5><ul>
+<li>volatile主要保证了一个共享变量在多个线程访问的情况下，保证了共享变量的可见性，比如一个线程对变量进行了修改，另一个线程能同步到修改的值。</li>
+</ul>
+<h4 id="4、线程池"><a href="#4、线程池" class="headerlink" title="4、线程池"></a>4、线程池</h4><ul>
+<li>在单个线程的使用中，频繁的创建销毁线程对象损耗较多的时间，影响系统性能，当有任务来时，临时创建性能也非常低效，节省了时间和效率。所以在多线程的开发中，尽量使用线程池的形式。</li>
+</ul>
+<h5 id="4-1、ThreadPoolExecutor"><a href="#4-1、ThreadPoolExecutor" class="headerlink" title="4.1、ThreadPoolExecutor"></a>4.1、ThreadPoolExecutor</h5><ul>
+<li>使用ThreadPoolExecutor进行创建线程池,用法</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">int</span> maximumPoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">long</span> keepAliveTime,</span></span></span><br><span class="line"><span class="function"><span class="params">                          TimeUnit unit,</span></span></span><br><span class="line"><span class="function"><span class="params">                          BlockingQueue&lt;Runnable&gt; workQueue)</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>corePoolSize是核心池的大小，maximumPoolSize最大线程数，keepAliveTime当没有任务时线程的存活时间，weekQueue阻塞队列，用来保存执行的任务，unit时间单位</li>
+<li>协作流程：线程优先向 CorePool 中提交；在 Corepool 满了之后，线程被提交到任务队列，等待线程池空闲；在任务队列满了之后 corePool 还没有空闲，那么任务将被提交到 maxPool 中，如果 MaxPool 满了之后执行 task 拒绝策略。</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2018/09/10/Java集合框架/" itemprop="url">
+                  Java集合框架
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-09-10T09:59:25Z" content="2018-09-10">
+              2018-09-10
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/09/10/Java集合框架/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/09/10/Java集合框架/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Java集合框架"><a href="#Java集合框架" class="headerlink" title="Java集合框架"></a>Java集合框架</h1><h2 id="1、概述"><a href="#1、概述" class="headerlink" title="1、概述"></a>1、概述</h2><ul>
+<li>java除了提供基本的数据类型支持外，还提供了对数据对象类型的存储框架，可以非常高效的，方便的操纵这些数据对象，并且能动态增长，集合可以用来存储、检索、操作、通信，它主要包含接口和实现类一些具体的操作方法。</li>
+<li>java的集合框架主要有两种，一种是集合（Collection）,集合是存储一类元素的结合，它是最基本的容器接口，继承了Iterable接口。另一种是图，它存储了键值对的映射关系，通过键能得到值。</li>
+</ul>
+<h2 id="2、Collection"><a href="#2、Collection" class="headerlink" title="2、Collection"></a>2、Collection</h2><ul>
+<li>Collection接口有三种子类型，分别为List，Set和Queue，由抽象类到具体的实现类，常用的有<h4 id="1、List介绍"><a href="#1、List介绍" class="headerlink" title="1、List介绍"></a>1、List介绍</h4></li>
+<li>List容器中的元素是有序可重复的，它能够控制每个元素的插入位置，用户还可以直接通过索引来进行访问。List的实现类还有LindedList,ArrayList,vector和stack.<h4 id="2、Set介绍"><a href="#2、Set介绍" class="headerlink" title="2、Set介绍"></a>2、Set介绍</h4></li>
+<li>Set里面存储的元素都是不重复的，并且里面的元素是无序的</li>
+</ul>
+<h4 id="3、Queue介绍"><a href="#3、Queue介绍" class="headerlink" title="3、Queue介绍"></a>3、Queue介绍</h4><ul>
+<li>队列继承了Collection接口，和List,Set是同一个级别的，只允许在一端进行插入操作，另一端进行删除操作。具有先进先出的特性</li>
+</ul>
+<h4 id="4、Map"><a href="#4、Map" class="headerlink" title="4、Map"></a>4、Map</h4><ul>
+<li>在程序中用于管理映射关系</li>
+<li>map里面的key和value是一一对应的，并且不允许里面的key重复</li>
+<li>map里面最重要的有一个entry方法，里面定义了对key或者value的获取方法</li>
+</ul>
+<h5 id="4-1-HashMap"><a href="#4-1-HashMap" class="headerlink" title="4.1 HashMap"></a>4.1 HashMap</h5><ul>
+<li>HashMap是最常用的map，存储根据键的hashCode来进行存储，根据键可以直接获取值，访问速度很快。</li>
+<li>遍历方式：遍历方式有根据keySet()值遍历和entrySet()键值进行遍历，还有迭代器iterator()的遍历方式。</li>
+<li>iterator（）方法的遍历：</li>
+</ul>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 使用keySet进行遍历</span><br><span class="line"><span class="keyword">Iterator&lt;String&gt; </span><span class="keyword">iterator </span>= <span class="meta">map</span>.keySet().<span class="keyword">iterator();</span></span><br><span class="line"><span class="keyword">while </span>(<span class="keyword">iterator.hasNext()) </span>&#123;</span><br><span class="line">    <span class="keyword">String </span>key = <span class="keyword">iterator.next();</span></span><br><span class="line"><span class="keyword"> </span>   System.out.println(<span class="meta">map</span>.get(key))<span class="comment">;</span></span><br><span class="line">&#125;</span><br><span class="line"># 使用entrySet()进行遍历</span><br><span class="line"><span class="keyword">Iterator&lt;Map.Entry&lt;String, </span><span class="keyword">String&gt;&gt; </span><span class="keyword">iterator </span>=      <span class="meta">map</span>.entrySet().<span class="keyword">iterator();</span></span><br><span class="line"><span class="keyword">while </span>(<span class="keyword">iterator.hasNext()) </span>&#123;</span><br><span class="line">    <span class="meta">Map</span>.Entry&lt;<span class="keyword">String, </span><span class="keyword">String&gt; </span><span class="meta">entry</span> = <span class="keyword">iterator.next();</span></span><br><span class="line"><span class="keyword"> </span>   System.out.println(<span class="meta">entry</span>.getValue())<span class="comment">;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3、Iterator"><a href="#3、Iterator" class="headerlink" title="3、Iterator"></a>3、Iterator</h2><ul>
+<li>iterator其实就是遍历，提供的标准化遍历容器内所有对象的方法，在迭代过程中，使用者不需要了解集合的内部的结构。</li>
+<li>iterator主要有3个方法</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">hasNext</span><span class="params">()</span></span>  <span class="comment">//判断是否还有元素供迭代</span></span><br><span class="line"><span class="function"><span class="title">next</span><span class="params">()</span></span>    <span class="comment">//返回迭代的下一个元素</span></span><br><span class="line">remove（）  <span class="comment">//移除迭代器返回的最后一个元素</span></span><br></pre></td></tr></table></figure>
+<h2 id="4、泛型"><a href="#4、泛型" class="headerlink" title="4、泛型"></a>4、泛型</h2><ul>
+<li>泛型主要是为了解决代码被不同对象的类型重用的问题，在集合框架中有广泛的使用。</li>
+</ul>
+<h4 id="4-1-泛型类"><a href="#4-1-泛型类" class="headerlink" title="4.1 泛型类"></a>4.1 泛型类</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Pair</span>&lt;K, V&gt; &#123;</span></span><br><span class="line">    <span class="keyword">private</span> K key;</span><br><span class="line">    <span class="keyword">private</span> V value;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="4-2-泛型方法"><a href="#4-2-泛型方法" class="headerlink" title="4.2 泛型方法"></a>4.2 泛型方法</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">public</span> Class A&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt;<span class="function">T <span class="title">test</span><span class="params">(T t)</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> t;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">hi</span><span class="params">(T t)</span></span>&#123;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="4-3-类型限定"><a href="#4-3-类型限定" class="headerlink" title="4.3 类型限定"></a>4.3 类型限定</h4><ul>
+<li>需要限制类型时使用 extends</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -494,6 +1025,8 @@
           
             <h2 id="1、前言"><a href="#1、前言" class="headerlink" title="1、前言"></a>1、前言</h2><blockquote>
 <p>写python的同学会经常听到pythonic这个词，但对于这个词语具体的语义，python社区每个人都有自己的独到的见解，因为pythonic自身就是人为造的单词。结合社区的观点可以知道：pythonic是python编程中的惯用方法，也就是写出简洁，优雅的代码，写出具有python独特风格的代码。</p>
+</blockquote>
+<blockquote>
 <p>尝试运行下面这行代码，显示的结果便是python编程之禅</p>
 </blockquote>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; <span class="keyword">import</span> <span class="keyword">this</span></span><br></pre></td></tr></table></figure>
@@ -833,9 +1366,11 @@
           
             <h3 id="1、flask的阻塞"><a href="#1、flask的阻塞" class="headerlink" title="1、flask的阻塞"></a>1、flask的阻塞</h3><blockquote>
 <p>flask是一个阻塞式的框架，在flask自带的服务器中，一次只能处理一个请求。所以、使用flask开发的网站后台处理网络请求也是这样的，类似于工厂的流水线生产、一个工人只有完成自己手上当前的工作，才能接着完成流水线上过来的另一个工作。</p>
-<p>后台开发中，不可避免的会存在一些非常耗时的请求，比如一些IO操作，或者耗时的计算任务。这样导致上一个请求处理完成之前，服务器无法处理其它请求，这样就造成了阻塞。虽然增加线程的数量能在一定程度上缓解这种糟糕的情况，但当并发量非常大时，多线程就显得无能为力。所以，要增加网络的响应速度，处理好耗时的操作是关键。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;在下面的图中，显示了一台小型Linux服务器的负载情况，可以看出，在设置1GB的空间作为交换空间的时候，性能任然捉襟见肘，</p>
 </blockquote>
+<blockquote>
+<p>后台开发中，不可避免的会存在一些非常耗时的请求，比如一些IO操作，或者耗时的计算任务。这样导致上一个请求处理完成之前，服务器无法处理其它请求，这样就造成了阻塞。虽然增加线程的数量能在一定程度上缓解这种糟糕的情况，但当并发量非常大时，多线程就显得无能为力。所以，要增加网络的响应速度，处理好耗时的操作是关键。</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;在下面的图中，显示了一台小型Linux服务器的负载情况，可以看出，在设置1GB的空间作为交换空间的时候，性能任然捉襟见肘，</p>
 <p><img src="http://oj387fyvl.bkt.clouddn.com/1G_over.png" alt="1G swap"></p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;在内存很小的情况下，为了避免Linux服务器宕机，设置更大的交换分区可以稍微解决燃眉之急，在设置2G的交换空间之后，情况得到了缓解<br>：<br><img src="http://oj387fyvl.bkt.clouddn.com/2g_swap.png" alt="2G swap"></p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;当然，最好的情况是直接升级服务器的硬件，因为将一部分硬盘设置为交换空间，也会影响磁盘的读写性能，除了硬件升级，优化程序也能带来很大的效率提升。</p>
@@ -1183,354 +1718,14 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/02/19/2015-2016年总结和新年鸡血/" itemprop="url">
-                  2015年总结和新年鸡血
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-02-18T21:39:45Z" content="2016-02-18">
-              2016-02-18
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/其它/" itemprop="url" rel="index">
-                    <span itemprop="name">其它</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/02/19/2015-2016年总结和新年鸡血/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/19/2015-2016年总结和新年鸡血/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>写这篇文章之前，我自己曾经犹豫过，到底还要不要写。一来16年已经快过去3个月了，二来不知道该写什么，该怎么总结，但是仔细想了想，还是写吧，趁自己对15年发生的事记忆犹新，趁现在还没开学，有时间~当然，博客的目的就是为了记录自己，而最重要的是想在新年给自己打打鸡血</p>
-<p>主要在生活，学习，专业上来回顾自己的这一年发生的事。15年对于我来说，充实而又有意义，很多以前没有做过的事情，在15年也尝试的做了，在这一年，学到了更多的知识，认识了更多有趣的人，去了更远的地方。</p>
-<h3 id="先来说说生活"><a href="#先来说说生活" class="headerlink" title="先来说说生活"></a>先来说说生活</h3><p>15年完成了大一下学期到大二上学期，学弟变成了学长的转变，总体而言，在对大学新鲜感神秘感退却以后，生活也慢慢的回归了平静，把更多的时间放在自己想做的事情上。因为课程的增加，自然没有大一上学期那般悠闲，自己自由的时间在变少，这一点在刚开学的时候就感受到了。虽然时间变少，可自己做的事情却比以前更多了。而且以前自己种的果也要自己吃，刚来大学的时候，自己怀着热情报名参加了很多社团，有一些要面试的社团也神奇的通过了。因此最后，我同时参加了三个社团，校青协、校职协还有计算机科学协会（acs）。对于前两个社团，自己一直都是酱油般的存在，很少参加活动，但是到了后来，自己仔细一想，发现良心上过不去。毕竟当时是自己报名参加的，既然参加了，就应该把该有的职责给承担起来，不能逃避。于是又主动的参加了一些活动，有些活动有意义，但更多的活动是没有意义的、比如让你写个无意义的策划，做个word。正因为社团无聊的活动太多，于是到了后来，大家对社团的热情都不高了，很多活动都没有人参加，这时候我们就被逼着参加，对于逼大家参加活动这种方式，我个人是非常反感的。不过这也让我更加相信了一句话</p>
-<blockquote>
-<p><strong>大学的很多社团都是松散的，无纪律的，虽然社团能成就一些人，可对于更多的人来说，参加社团活动就是浪费时间，完全学不到什么。</strong></p>
-</blockquote>
-<p>但是其中acs却让我感受到了不同，里面的学长学姐不会教你这个社会的”大道理”，而是真诚的对待你，会把生活学习中的曾经遇到过的些坑告诉你。正因为如此，我课余的时间都待在协会这边的工作室，在这里，大家因为志趣相投而聚在一起。也许是自己在这边做事比较认真，也许是其它原因，学长们慢慢地让我去组织一些大型活动。比如6月的校程序设计大赛，自己作为组织者之一，看着活动办好了，意义也很大，心里说不出的高兴。再后来，自己也成为了这个协会的管理者，责任越来越大。但自己管理半年之后，现在再看，凭心而论，自己确实没有把协会带好，这里面有很多的原因，更多的原因是自己，也在趁过年的时间好好反思。<br> 15年自己也去了一些地方，暑假参加学校的三下乡活动，跨院联合20多人到婺源太白镇教小孩子们学习一些知识，短暂的十几天，我们给小镇带去一些活力。活动还是很有意义的，每天去学校的时候，都可以看见小孩子们很开心，帮村民修电脑也是有意义的事情。三下乡活动结束后，自己回家安静了几天，就和朋友们一起去了广州，在那里度过了5天。前几天还在婺源农村，瞬间就到了发达的广州，由破败到金碧辉煌灯红酒绿，自己的心理有很大的落差，有的时候也会感叹为何社会发展差距如此之大（好像忧国忧民也没有用，还是好好学习吧～）。在玩的几天中，更加认识到，想要到大城市立足，自己需要付出很多的努力。就像老话说的那样，付出不一定有收获，但是不付出一定没有收获。<br> 社团生活说了很多，主要是它的确占了我生活很大一部分吧，那啥就不说了，感觉自己是注孤生的存在。。。</p>
-<h3 id="再来说说学习"><a href="#再来说说学习" class="headerlink" title="再来说说学习"></a>再来说说学习</h3><p>学习上，这一年自己没有认真去看书，上课也不知道自己干了什么，考试也是期末临时突击，这样没有挂科已是万幸。自己清楚以后读研的可能性不大，因此学习上没多花时间我倒也是心安理得。不过，谁能告诉我，课堂的时间我都干什么去了！！！是该好好想一下这个问题，好好的利用课堂时间做点什么，不要白白浪费了自己还不知道。同时，专业主干课该学的还是要认真学，比如计算机网络（虽然这门已经学完了）这些课的很多知识在自己编程开发过程中都会遇到，不能小看。专业学习因为自己刚来的时候嚷嚷着想学硬件，也学习一些知识，用树莓派做了一些东西。但技术含量不高，同时，因为学校缺少这方面的老师，自学资料少，感觉走下去难度太大。因此有意提高自己对Python的运用能力，因为Python能做好多事。经过几个学期的学习，意识到，cs本科的基础课程数据结构/算法对自己来说非常有用，自己也要尝试刷点题目，把基础学好，再针对某一个就业方面深入学习， 才是正道。</p>
-<h3 id="最后说说专业"><a href="#最后说说专业" class="headerlink" title="最后说说专业"></a>最后说说专业</h3><p>15年上学期自己转了专业，转到了网络工程，原来的专业在学校是个坑啊。现在很庆幸当初有学长提醒自己转专业。原来用树莓派做了一辆小车，匆忙之间拿去参加比赛了，后来下半年也陆陆续续参加了一些专业比赛。虽说这些比赛是省级的，但是都很水。现在很多比赛就看你演讲的怎么样，答辩的效果怎么样，却忽略背后深层次的技术，然后问你的作品“商业价值”“能不能挣钱”这些于技术本身无关的问题，这些比赛都是计算机作品的比赛啊，问这样的问题真的好吗！！现在社会上流行创新创业，这股风气也带进了学校，个人十分反感。虽然大学生头脑灵活点子多，但是被“逼”着创新创业也不太好吧。在比赛过程中，甚至看见过没有作品，只有一个ppt，答辩的时候就说自己的创意的参赛队伍！这还是计算机“作品”比赛吗？当然，也参加过机器人比赛，这种比赛能不能取得好成绩很大程度上取决于你学校肯不肯多投钱，买新的传感器和配件，不是完全看技术的比赛。现在，自己在慢慢的学习web开发。</p>
-<h3 id="新年给自己的鸡血"><a href="#新年给自己的鸡血" class="headerlink" title="新年给自己的鸡血"></a>新年给自己的鸡血</h3><p>新年，也想大致的给自己定下一些目标，努力完成吧~~</p>
-<ul>
-<li>刷题</li>
-<li>上半年完成一个项目，目前已有初步计划</li>
-<li>pyhton web上多花时间</li>
-<li>专业课程认真学</li>
-<li>参加有意义的比赛（免费旅游涨姿势，拿了奖学金又可以买机械键盘固态硬盘····hahhhhhh</li>
-<li>锻炼身体学英语</li>
-<li>出去玩玩（一个人的旅行？</li>
-<li>尝试ios开发？</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/02/19/使用hexo在GitHub搭建个人博客/" itemprop="url">
-                  使用hexo在GitHub搭建个人博客
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-02-18T17:36:43Z" content="2016-02-18">
-              2016-02-18
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/其它/" itemprop="url" rel="index">
-                    <span itemprop="name">其它</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/02/19/使用hexo在GitHub搭建个人博客/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/19/使用hexo在GitHub搭建个人博客/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>hexo是一款快速、简洁、高效的博客框架，底层基于node.js，博客编写文章采用markdown语法，网上也有很多针对hexo开发的开源博客主题，直接使用，就可以让博客变得美观。GitHub Pages免费提供静态页面托管的服务，容量为300M，对于一个博客来说，容量已经足够了，但其中也存在一个问题，github毕竟是一个国外的网站，国内访问速度有限，而且万一github被墙，我们也可以用国内的gitcafe来托管博客。<br>hexo在升级中很多地方发生了变动，很多Google的教程都是针对老版本的，自己的安装部署的时候参照老教程踩了一些坑，因此将新版本的安装具体的步骤记录下来，以飨读者：</p>
-<p><strong>环境</strong>：</p>
-<ul>
-<li>Ubuntu 14.04 LTS </li>
-<li>OS X EI Capitan</li>
-</ul>
-<h2 id="OS-X-EI-Capitan安装hexo方法"><a href="#OS-X-EI-Capitan安装hexo方法" class="headerlink" title="OS X EI Capitan安装hexo方法"></a>OS X EI Capitan安装hexo方法</h2><blockquote>
-<p>在mac下，可以使用包管理器brew来安装一些软件，方便快捷，brew管理器安装方法<a href="http://brew.sh/index_zh-cn.html" target="_blank" rel="noopener">链接</a>，Mac安装软件过程中，如果失败，可尝试在命令前加sudo</p>
-</blockquote>
-<p>在终端中粘帖下面代码，然后回车：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/ruby -e <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></span><br></pre></td></tr></table></figure>
-<h3 id="1、安装node-js"><a href="#1、安装node-js" class="headerlink" title="1、安装node.js"></a>1、安装node.js</h3><p>终端中输入：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install node</span><br></pre></td></tr></table></figure>
-<p>node.js也可以自己去官网下载，自行安装</p>
-<h3 id="2、安装git"><a href="#2、安装git" class="headerlink" title="2、安装git"></a>2、安装git</h3><p>安装git的目的是方便自己将博客同步到github、终端中输入：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install git</span><br></pre></td></tr></table></figure>
-<p>git也可以自己去官网下载，自行安装</p>
-<h3 id="3、安装hexo"><a href="#3、安装hexo" class="headerlink" title="3、安装hexo"></a>3、安装hexo</h3><p>node.js安装成功后自带了npm，因此我们用npm来安装hexo，终端中输入</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo    <span class="comment">#-g为全局参数</span></span><br></pre></td></tr></table></figure>
-<p>在终端中依次输入，如果正确显示版本号，则安装成功</p>
-<ul>
-<li>node -v </li>
-<li>git varsion</li>
-<li>hexo version</li>
-</ul>
-<img src="/2016/02/19/使用hexo在GitHub搭建个人博客/macversion.png">
-<h3 id="4、本地测试博客"><a href="#4、本地测试博客" class="headerlink" title="4、本地测试博客"></a>4、本地测试博客</h3><p>在基本的环境搭建好以后，打开终端，cd到自己测试的文件夹中，依次输入如下命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo init &lt;floder&gt;   <span class="comment">#&lt;floder&gt;代表你要创建的博客文件夹</span></span><br><span class="line">npm install     <span class="comment">#安装必要的依赖库</span></span><br></pre></td></tr></table></figure>
-<p>安装成功后，可以看到自动生成的文件目录为：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">node_modules</span><br><span class="line">scaffolds</span><br><span class="line"><span class="built_in">source</span></span><br><span class="line">     -posts</span><br><span class="line">themes</span><br><span class="line">     -landscape  <span class="comment">#默认博客主题</span></span><br><span class="line">_config.yml</span><br><span class="line">package.json</span><br></pre></td></tr></table></figure>
-<p>接着，在终端中运行博客程序：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server   <span class="comment">#或者输入 hexo s</span></span><br></pre></td></tr></table></figure>
-<p>在终端中会显示：</p>
-<img src="/2016/02/19/使用hexo在GitHub搭建个人博客/mac.png">
-<p>如果以上没有发生错误，在浏览器中打开localhost:4000可以看到生成的博客。<br>此处有一个大坑需要注意（特别对于不细心的同学）</p>
-<blockquote>
-<p>终端显示程序运行在0.0.0.0:4000,如果自己不小心就会用鼠标复制粘帖打开，或者右键直接打开url，但是此时在<br>浏览器却发现网页无显示！！！一开始我以为是环境没有配置好，少了一些依赖库，一这折腾环境，后来发现是localhost的原因，你本机上的localhost不一定是0.0.0.0,特别是你翻墙用了一些代理工具时。<br>同时，我还遇到过在safari上能正确显示网页，chrome上却无显示的问题，这都是因为localhost。</p>
-</blockquote>
-<p>如果网页能正确的显示，就可以来设置博客的主题了，主题可以自己写（愿意折腾的话），也可以直接用一些开源的主题<br>github上有很多，比如这个博客，就是用的开源hexo主题nexT构建的。</p>
-<p><strong> 关于主题，因为每个人用的都不尽相同，这里就不做过多介绍，每个热门的主题都有相应的document，可以直接用，也可以自己diy</strong></p>
-<h2 id="Ubuntu-14-04LTS-安装hexo方法"><a href="#Ubuntu-14-04LTS-安装hexo方法" class="headerlink" title="Ubuntu 14.04LTS 安装hexo方法"></a>Ubuntu 14.04LTS 安装hexo方法</h2><p>ubuntu中可以在终端直接用apt-get来安装，安装各个软件也需要注意是否需要<strong> sudo </strong>的问题</p>
-<h3 id="1、安装git"><a href="#1、安装git" class="headerlink" title="1、安装git"></a>1、安装git</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install git</span><br></pre></td></tr></table></figure>
-<h3 id="2、安装node-js"><a href="#2、安装node-js" class="headerlink" title="2、安装node.js"></a>2、安装node.js</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install nodejs</span><br></pre></td></tr></table></figure>
-<p>此种方法安装的nodejs可能版本会较低，具体看自己系统配置的软件源<br>如果担心过低，可在安装之前输入：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:chris-lea/node.js </span><br><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
-<p>然后再安装</p>
-<h3 id="3、安装hexo-1"><a href="#3、安装hexo-1" class="headerlink" title="3、安装hexo"></a>3、安装hexo</h3><p>在终端中输入</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install -g hexo</span><br></pre></td></tr></table></figure>
-<h3 id="4、本地测试博客-1"><a href="#4、本地测试博客-1" class="headerlink" title="4、本地测试博客"></a>4、本地测试博客</h3><p>如果上述都安装好，就可以在本地测试建立博客了，方法和在OS X EI Capitan中一样，唯一需要注意的是是否需要sudo权限的问题，方法<strong>见上文</strong>。 </p>
-<h2 id="配置git"><a href="#配置git" class="headerlink" title="配置git"></a>配置git</h2><h3 id="1、设置ssh-key，"><a href="#1、设置ssh-key，" class="headerlink" title="1、设置ssh key，"></a>1、设置ssh key，</h3><p>ssh key是git提交代码到github的通行证，我们在终端中设置ssh key步骤如下（以在mac上为列）：</p>
-<p>打开终端，输入命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> \~/. ssh   <span class="comment">#这条代码可以检查电脑上是否已安装ssh key 如没有，执行下面的步骤</span></span><br></pre></td></tr></table></figure>
-<p>生成ssh key，然后输入：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C <span class="string">"邮件地址@youremail.com"</span>  <span class="comment">#注意大小写 按回车可见下面内容</span></span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file <span class="keyword">in</span> <span class="built_in">which</span> to save the key (/Users/DoubleD/.ssh/id\_rsa):   <span class="comment">#继续按回车可见</span></span><br><span class="line"></span><br><span class="line">Enter passphrase (empty <span class="keyword">for</span> no passphrase):\&lt;输入加密串\&gt;</span><br><span class="line">Enter same passphrase again:\&lt;再次输入加密串\&gt;</span><br></pre></td></tr></table></figure>
-<p>成功生成ssh key</p>
-<p>然后在本机上cd找到id_rsa.pub ,然后输入</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat id_rsa.pub</span><br></pre></td></tr></table></figure>
-<p>就可以看见ssh key了，将其复制备用。</p>
-<h3 id="2、github建立博客仓库"><a href="#2、github建立博客仓库" class="headerlink" title="2、github建立博客仓库"></a>2、github建立博客仓库</h3><p>打开自己的github，新建一个仓库，仓库命名如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">your_github_name.github.io  <span class="comment">#一定要严格命名</span></span><br></pre></td></tr></table></figure>
-<p>然后在此github主页的<strong> settings-&gt;ssh key </strong>中可以添加生成的ssh key  将刚才复制的粘帖到输入框,保存。</p>
-<h3 id="3、git连接github"><a href="#3、git连接github" class="headerlink" title="3、git连接github"></a>3、git连接github</h3><p>上述设置好了之后，可以继续测试连接，在mac终端下输入下面内容</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure>
-<p>如果返回结果如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">he authenticity of host <span class="string">'github.com (207.97.227.239)'</span> can<span class="string">'t be established.</span></span><br><span class="line"><span class="string">RSA key fingerprint is ×××××××××××××××××××××××××××××××××××××××.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no)?</span></span><br></pre></td></tr></table></figure>
-<p>输入yes，最后继续配置git的用户信息，输入：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">"your_name"</span></span><br><span class="line">git config --global user.email  <span class="string">"your_email_address"</span></span><br></pre></td></tr></table></figure>
-<h2 id="博客上传等文章编写操作"><a href="#博客上传等文章编写操作" class="headerlink" title="博客上传等文章编写操作"></a>博客上传等文章编写操作</h2><h3 id="1、博客部署到github"><a href="#1、博客部署到github" class="headerlink" title="1、博客部署到github"></a>1、博客部署到github</h3><p>在本地测试发现博客没有问题后，就可以部署到github。<br>注意：</p>
-<blockquote>
-<p>博客上至少要有一篇文章，否则访问页面会出错。</p>
-</blockquote>
-<p>部署时，在终端博客目录执行下面目录：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean   <span class="comment">#清除数据以及public文件</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo g     <span class="comment">#生成网页的静态页面，部署到github的也就是这些静态页面</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo d     <span class="comment">#部署到github，这一步如果报错，则缺少依赖库，则首先执行下面操作</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-<p>最后，按照提示操作，就可以完成了，然后访问your_github_name.github.io就可以访问博客页面了。</p>
-<h3 id="2、博客文章编写等操作"><a href="#2、博客文章编写等操作" class="headerlink" title="2、博客文章编写等操作"></a>2、博客文章编写等操作</h3><p>在终端中输入</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new title   <span class="comment">#title代表文章标题</span></span><br></pre></td></tr></table></figure>
-<p>就可以看到在博客source/_posts生成了一个title标题的md文件，这就是我们写文章的地方，可以用markdown语法对其进行编辑</p>
-<p>里面可以编辑文章的相关信息如：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tags: <span class="string">""</span>  <span class="comment">#标签</span></span><br><span class="line">categories: <span class="string">""</span>分类</span><br><span class="line">等</span><br></pre></td></tr></table></figure>
-<p>这里值得一说的是，hexo 3版本插入图像等文件已经不能用原来的markdown语法</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">！[](/test.png)   <span class="comment">#这样写是错误的</span></span><br></pre></td></tr></table></figure>
-<p>正确的写法是，在md文件里，插入这样的语法标签：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% asset_img test.jpg %&#125;</span><br></pre></td></tr></table></figure>
-<p>这样才能正确的显示图片。这里也算一个坑吧。</p>
-<p>当你编辑博客文章的时候，你一定还会想，我的图像文件该放在哪里？这里作者提供了一个解决方法，<br>先找到博客站点的配置文件_config.yml,然后将post_asset_folder修改为true：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">post_asset_folder: <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<p>修改成功后，当你再运行hexo g生成博客文章的时候，就会发现在_posts文件夹下多生成了一个以你文章title命名的文件夹，这个文件夹就是用来存放图像等附加资源的。</p>
-<h2 id="购买域名和dns设置"><a href="#购买域名和dns设置" class="headerlink" title="购买域名和dns设置"></a>购买域名和dns设置</h2><h3 id="1、购买域名"><a href="#1、购买域名" class="headerlink" title="1、购买域名"></a>1、购买域名</h3><p>域名购买我选择了Go Daddy，它是全球最大的域名注册商，而且十分良心支持支付宝付款。虽然go daddy页面是英语的，但是注册，购买都很简单，这里就不多介绍购买了，主要介绍dns的配置</p>
-<h3 id="2、dns"><a href="#2、dns" class="headerlink" title="2、dns"></a>2、dns</h3><p>域名解析可以使用DNSPod，可以用qq直接登录。登录后选择<strong> 域名解析-&gt;添加域名 </strong>。然后设置成如下<br><img src="/2016/02/19/使用hexo在GitHub搭建个人博客/dns.jpg"></p>
-<p>备注：手动添加的两个A记录都是github服务器的ip，然后添加一个CNAME记录。</p>
-<p>登录go daddy 选择功能my products-&gt;点击已经购买的域名</p>
-<img src="/2016/02/19/使用hexo在GitHub搭建个人博客/dnsset.png">
-<img src="/2016/02/19/使用hexo在GitHub搭建个人博客/servername.png">
-<p>然后手动设置dns server为DNSSPod提供的server，最后配置如下：</p>
-<img src="/2016/02/19/使用hexo在GitHub搭建个人博客/ipset.png">
-<p>最后，在github博客仓库上增加一个CNAME文件，里面添加内容：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">your_domia.com  <span class="comment">#例如：ddragonever.com</span></span><br></pre></td></tr></table></figure>
-<h2 id="附：博客主题"><a href="#附：博客主题" class="headerlink" title="附：博客主题"></a>附：博客主题</h2><p>在本文中，没有介绍博客主题的具体配置，主要考虑到主题太多，而且每个主题都要相应的document，文档里面有很详细的介绍。这里附上github上star数比较多的几个主题链接：</p>
-<ul>
-<li><a href="https://github.com/litten/hexo-theme-yilia" target="_blank" rel="noopener">hexo-theme-yilia</a></li>
-<li><a href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="noopener">hexo_theme-next</a></li>
-<li><a href="https://github.com/LouisBarranqueiro/hexo-theme-tranquilpeak" target="_blank" rel="noopener">hexo-theme-tranquilpeak</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -1569,7 +1764,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-count">12</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1664,8 +1859,8 @@
       <div class="footer-inner">
         <div class="copyright" >
   
-  &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
